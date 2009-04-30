@@ -405,7 +405,7 @@ class Spyc {
       $is_quoted = true;
     } while (0);
 
-    if (!$is_quoted && strpos($value, '#') !== false)
+    if (!$is_quoted && strpos($value, ' #') !== false)
       $value = preg_replace('/\s+#(.+)$/','',$value);
 
     if (preg_match('/^("(.*)"|\'(.*)\')/',$value,$matches)) {
