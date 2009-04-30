@@ -347,8 +347,8 @@ class Spyc {
 
       $this->addArray($lineArray, $this->indent);
 
-      foreach ($this->delayedPath as $delayedPath)
-        $this->path[] = $delayedPath;
+      foreach ($this->delayedPath as $indent => $delayedPath)
+        $this->path[$indent] = $delayedPath;
 
       $this->delayedPath = array();
 
@@ -739,9 +739,7 @@ class Spyc {
   }
 
   private function getParentPathByIndent ($indent) {
-
     if ($indent == 0) return array();
-
     $linePath = $this->path;
     do {
       end($linePath); $lastIndentInParentPath = key($linePath);
@@ -809,7 +807,7 @@ class Spyc {
     $array = array();
     $key         = trim(substr(substr($line,1),0,-1));
     $array[$key] = array();
-    $this->delayedPath = array($key);
+    $this->delayedPath = array(strpos ($line, $key) + $this->indent => $key);
     return array($array);
   }
 

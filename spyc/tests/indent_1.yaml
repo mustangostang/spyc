@@ -9,14 +9,14 @@ root2:
 # A comment
   child_2: 2
 
-display:
-  - resolutions:
-      1024: 768
-      1920: 1200
-    producer: "Nec"
-
 displays:
   - resolutions:
       1024: 768
   - resolutions:
       1920: 1200
+
+display:
+  - resolutions:
+      1024: 768
+      1920: 1200
+    producer: "Nec"
