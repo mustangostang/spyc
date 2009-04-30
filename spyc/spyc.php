@@ -331,7 +331,7 @@ class Spyc {
       
       $this->indent = strlen($line) - strlen(ltrim($line));
       $tempPath = $this->getParentPathByIndent($this->indent);
-      $line = $this->stripIndent($line, $this->indent);
+      $line = self::stripIndent($line, $this->indent);
       if (self::isComment($line)) continue;
       if (self::isEmpty($line)) continue;
       $this->path = $tempPath;
@@ -429,7 +429,7 @@ class Spyc {
      */
   private function _toType($value) {
     if ($value === '') return null;
-    $first_character = substr($value, 0, 1);
+    $first_character = $value[0];
     $last_character = substr($value, -1, 1);
 
     $is_quoted = false;
@@ -712,13 +712,14 @@ class Spyc {
   }
 
   private static function greedilyNeedNextLine($line) {
-    if (preg_match ('#^\s*\[#', $line) && !preg_match ('#\]\s*$#', $line))
-      return true;
+    $line = trim ($line);
+    if (!strlen($line)) return false;
+    if ($line[0] == '[' && substr ($line, -1, 1) != ']') return true;
     return false;
   }
 
   private function addLiteralLine ($literalBlock, $line, $literalBlockStyle) {
-    $line = $this->stripIndent($line);
+    $line = self::stripIndent($line);
     $line = rtrim ($line, "\r\n\t ") . "\n";
     if ($line == "\n") $line = '';
 
@@ -744,7 +745,7 @@ class Spyc {
      return $lineArray;
    }
 
-  private function stripIndent ($line, $indent = -1) {
+  private static function stripIndent ($line, $indent = -1) {
     if ($indent == -1) $indent = strlen($line) - strlen(ltrim($line));
     return substr ($line, $indent);
   }
@@ -775,14 +776,14 @@ class Spyc {
 
 
   private static function isComment ($line) {
-    if (preg_match('/^#/', $line)) return true;
+    if (!$line) return false;
+    if ($line[0] == '#') return true;
     if (trim($line, " \r\n\t") == '---') return true;
     return false;
   }
 
   private static function isEmpty ($line) {
-    if (preg_match('/^\s+$/', $line)) return true;
-    return false;
+    return (trim ($line) === '');
   }
 
 
@@ -796,11 +797,7 @@ class Spyc {
   }
 
   private function isHashElement ($line) {
-    if (!preg_match('/^(.+?):/', $line, $matches)) return false;
-    $allegedKey = $matches[1];
-    if ($allegedKey) return true;
-    //if (substr_count($allegedKey, )
-    return false;
+    return strpos($line, ':');
   }
 
   private function isLiteral ($line) {
@@ -811,7 +808,7 @@ class Spyc {
 
 
   private function startsMappedSequence ($line) {
-    if (preg_match('/^-(.*):$/',$line)) return true;
+    return ($line[0] == '-' && substr ($line, -1, 1) == ':');
   }
 
   private function returnMappedSequence ($line) {
@@ -830,12 +827,11 @@ class Spyc {
   }
 
   private function startsMappedValue ($line) {
-    if (preg_match('/^(.*):$/',$line)) return true;
+    return (substr ($line, -1, 1) == ':');
   }
   
   private function isPlainArray ($line) {
-    if (preg_match('/^\[(.*)\]$/', $line)) return true;
-    return false;
+    return ($line[0] == '[' && substr ($line, -1, 1) == ']');
   }
   
   private function returnPlainArray ($line) {
@@ -843,13 +839,11 @@ class Spyc {
   }  
 
   private function returnKeyValuePair ($line) {
-
     $array = array();
-
-    if (preg_match('/^(.+):/',$line,$key)) {
+    if (strpos ($line, ':')) {
       // It's a key/value pair most likely
       // If the key is in double quotes pull it out
-      if (preg_match('/^(["\'](.*)["\'](\s)*:)/',$line,$matches)) {
+      if (($line[0] == '"' || $line[0] == "'") && preg_match('/^(["\'](.*)["\'](\s)*:)/',$line,$matches)) {
         $value = trim(str_replace($matches[1],'',$line));
         $key   = $matches[2];
       } else {
@@ -886,8 +880,8 @@ class Spyc {
   private function nodeContainsGroup ($line) {    
     $symbolsForReference = 'A-z0-9_\-';
     if (strpos($line, '&') === false && strpos($line, '*') === false) return false; // Please die fast ;-)
-    if (preg_match('/^(&['.$symbolsForReference.']+)/', $line, $matches)) return $matches[1];
-    if (preg_match('/^(\*['.$symbolsForReference.']+)/', $line, $matches)) return $matches[1];
+    if ($line[0] == '&' && preg_match('/^(&['.$symbolsForReference.']+)/', $line, $matches)) return $matches[1];
+    if ($line[0] == '*' && preg_match('/^(\*['.$symbolsForReference.']+)/', $line, $matches)) return $matches[1];
     if (preg_match('/(&['.$symbolsForReference.']+$)/', $line, $matches)) return $matches[1];
     if (preg_match('/(\*['.$symbolsForReference.']+$)/', $line, $matches)) return $matches[1];
     return false;
