@@ -25,6 +25,18 @@
    */
 class Spyc {
 
+  // SETTINGS
+
+  /**
+   * Setting this to true will force YAMLDump to enclose any string value in
+   * quotes.
+   * 
+   * @var bool
+   */
+  public $setting_dump_force_quotes = false;
+
+
+
   /**#@+
   * @access private
   * @var mixed
@@ -235,11 +247,12 @@ class Spyc {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
       $value  = $this->_doFolding($value,$indent);
+      if (is_bool($value)) {
+        $value = ($value) ? "true" : "false";
+      }
     }
 
-    if (is_bool($value)) {
-      $value = ($value) ? "true" : "false";
-    }
+    
 
     $spaces = str_repeat(' ',$indent);
 
@@ -280,16 +293,18 @@ class Spyc {
      */
   private function _doFolding($value,$indent) {
     // Don't do anything if wordwrap is set to 0
-    if ($this->_dumpWordWrap === 0) {
-      return $value;
-    }
 
-    if (strlen($value) > $this->_dumpWordWrap) {
+    if ($this->_dumpWordWrap !== 0 && strlen($value) > $this->_dumpWordWrap) {
       $indent += $this->_dumpIndent;
       $indent = str_repeat(' ',$indent);
       $wrapped = wordwrap($value,$this->_dumpWordWrap,"\n$indent");
       $value   = ">\n".$indent.$wrapped;
+    } else {
+      if ($this->setting_dump_force_quotes && is_string ($value))
+        $value = '"' . $value . '"';
     }
+
+
     return $value;
   }
 
