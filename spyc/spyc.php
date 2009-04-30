@@ -381,7 +381,7 @@ class Spyc {
   private function loadFromString ($input) {
     $lines = explode("\n",$input);
     foreach ($lines as $k => $_) {
-      $lines[$k] = trim ($_, "\r");
+      $lines[$k] = rtrim ($_, "\r");
     }
     return $lines;
   }
@@ -495,8 +495,8 @@ class Spyc {
       return $value;
     }
 
-    if (in_array(strtolower($value),
-                 array('true', 'on', '+', 'yes', 'y'))) {
+    if (in_array($value,
+                 array('true', 'on', '+', 'yes', 'y', 'True', 'TRUE', 'On', 'ON', 'YES', 'Yes', 'Y'))) {
       return true;
     }
 
