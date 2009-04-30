@@ -664,16 +664,21 @@ class Spyc {
     if ($array[$key] === array()) { $array[$key] = ''; };
     $value = $array[$key];
 
-    // Unfolding inner array tree.
     $tempPath = Spyc::flatten ($this->path);
-    eval ('$_arr = $this->result' . $tempPath . ';');
-
+    // Unfolding inner array tree.
+    $_arr = $this->result;
+    foreach ($this->path as $k) {
+      $_arr = $_arr[$k];
+    }
 
     if ($this->_containsGroupAlias) {
       do {
         if (!isset($this->SavedGroups[$this->_containsGroupAlias])) { echo "Bad group name: $this->_containsGroupAlias."; break; }
         $groupPath = $this->SavedGroups[$this->_containsGroupAlias];
-        eval ('$value = $this->result' . Spyc::flatten ($groupPath) . ';');
+        $value = $this->result;
+        foreach ($groupPath as $k) {
+          $value = $value[$k];
+        }
       } while (false);
       $this->_containsGroupAlias = false;
     }
@@ -690,6 +695,7 @@ class Spyc {
 
     $this->path[$indent] = $key;
 
+    
     eval ('$this->result' . $tempPath . ' = $_arr;');
 
     if ($this->_containsGroupAnchor) {
