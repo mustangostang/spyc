@@ -209,3 +209,5 @@ if ($yaml_after_dump != $yaml) {
   file_put_contents('~test-spyc.yaml', Spyc::YAMLDump ($yaml));
   die ("Dump-load integrity failed.");
 }
+
+print "Dump-load integrity: ok.\n";
