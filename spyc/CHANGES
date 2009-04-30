@@ -10,11 +10,11 @@
 title: Spyc -- a Simple PHP YAML Class
 version: 0.3
 authors:
-  - [chris wanstrath, chris@ozmm.org]
-  - [vlad andersen, vlad@oneiros.ru]
+  - [Chris Wanstrath, chris@ozmm.org]
+  - [Vlad Andersen, vlad@oneiros.ru]
 websites: [http://www.yaml.org, http://spyc.sourceforge.net/]
 license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
-copyright: (c) 2005-2006 Chris Wanstrath
+copyright: (c) 2005-2009 Chris Wanstrath, Vlad Andersen
 
 changes:
 
@@ -26,6 +26,7 @@ changes:
     - Only alphanumeric characters are now allowed in reference names.
     - Fixed a bug with inline arrays (thanks Tobiah for pointing it out).
     - Fixed a bug with ">" symbol (thanks to Pierre Tardy).
+    - Numerous bugs also fixed (thanks to fellow programmers and bug reporters)
     
   0.2.5:
     - All .yml file extensions changed to .yaml (see recommendation: http://yaml.org/faq.html)
