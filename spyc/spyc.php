@@ -484,7 +484,7 @@ class Spyc {
       return $array;
     }
 
-    if (strtolower($value) == 'null' or $value == '' or $value == '~') {
+    if ($value == 'null' || $value == 'NULL' || $value == 'Null' || $value == '' || $value == '~') {
       return null;
     }
 
