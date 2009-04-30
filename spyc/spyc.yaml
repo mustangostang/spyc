@@ -1,0 +1,120 @@
+#
+#    S P Y C
+#      a simple php yaml class
+#   v0.3
+#
+# author: [chris wanstrath, chris@ozmm.org]
+# websites: [http://www.yaml.org, http://spyc.sourceforge.net/]
+# license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
+# copyright: (c) 2005-2006 Chris Wanstrath
+#
+# spyc.yml - A file containing the YAML that Spyc understands.
+
+# Mappings - with proper types
+String: Anyone's name, really.
+Int: 13
+True: true
+False: false
+Zero: 0
+Null: NULL
+Float: 5.34
+
+# A sequence
+- PHP Class
+- Basic YAML Loader
+- Very Basic YAML Dumper
+
+# A sequence of a sequence
+-
+  - YAML is so easy to learn.
+  - Your config files will never be the same.
+
+# Sequence of mappings
+-
+  cpu: 1.5ghz
+  ram: 1 gig
+  os : os x 10.4.1
+
+# Mapped sequence
+domains:
+  - yaml.org
+  - php.net
+
+# A sequence like this.
+- program: Adium
+  platform: OS X
+  type: Chat Client
+
+# A folded block as a mapped value
+no time: >
+  There isn't any time
+  for your tricks!
+
+  Do you understand?
+
+# A literal block as a mapped value
+some time: |
+  There is nothing but time
+  for your tricks.
+
+# Crazy combinations
+databases:
+  - name: spartan
+    notes:
+      - Needs to be backed up
+      - Needs to be normalized
+    type: mysql
+
+# You can be a bit tricky
+"if: you'd": like
+
+# Inline sequences
+- [One, Two, Three, Four]
+
+# Nested Inline Sequences
+- [One, [Two, And, Three], Four, Five]
+
+# Nested Nested Inline Sequences
+- [This, [Is, Getting, [Ridiculous, Guys]], Seriously, [Show, Mercy]]
+
+# Inline mappings
+- {name: chris, age: young, brand: lucky strike}
+
+# Nested inline mappings
+- {name: mark, age: older than chris, brand: [marlboro, lucky strike]}
+
+# References -- they're shaky, but functional
+dynamic languages: &DLANGS
+  - Perl
+  - Python
+  - PHP
+  - Ruby
+compiled languages: &CLANGS
+  - C/C++
+  - Java
+all languages:
+  - *DLANGS
+  - *CLANGS
+
+# Added in .2.2: Escaped quotes
+- you know, this shouldn't work.  but it does.
+- 'that''s my value.'
+- 'again, that\'s my value.'
+- "here's to \"quotes\", boss."
+
+# added in .2.3
+- {name: "Foo, Bar's", age: 20}
+
+# Added in .2.4: bug [ 1418193 ] Quote Values in Nested Arrays
+- [a, ['1', "2"], b]
+
+# Added in .2.4: malformed YAML
+all
+  javascripts:     [dom1.js, dom.js]
+
+# Added in .2
+1040: Ooo, a numeric key! # And working comments? Wow! Colons in comments: a menace (0.3).
+
+# [Endloop]
+endloop: |
+  Does this line in the end indeed make Spyc go to an infinite loop?
