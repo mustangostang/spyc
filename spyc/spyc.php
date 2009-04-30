@@ -369,7 +369,7 @@ class Spyc {
     } while (0);
 
     if (!$is_quoted && strpos($value, '#') !== false)
-      $value = trim(preg_replace('/#(.+)$/','',$value));
+      $value = preg_replace('/\s+#(.+)$/','',$value);
 
     if (preg_match('/^("(.*)"|\'(.*)\')/',$value,$matches)) {
       $value = (string)preg_replace('/(\'\'|\\\\\')/',"'",end($matches));
