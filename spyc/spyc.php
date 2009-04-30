@@ -5,7 +5,7 @@
    * @author Chris Wanstrath <chris@ozmm.org>
    * @author Vlad Andersen <vlad@oneiros.ru>
    * @link http://spyc.sourceforge.net/
-   * @copyright Copyright 2005-2006 Chris Wanstrath
+   * @copyright Copyright 2005-2006 Chris Wanstrath, 2006-2009 Vlad Andersen
    * @license http://www.opensource.org/licenses/mit-license.php MIT License
    * @package Spyc
    */
@@ -287,7 +287,7 @@ class Spyc {
     return $value;
   }
 
-/* LOADING FUNCTIONS */
+// LOADING FUNCTIONS
 
   private function load($input) {
     $Source = $this->loadFromSource($input);
@@ -335,6 +335,7 @@ class Spyc {
 
 
       $lineArray = $this->_parseLine($line);
+
       if ($literalBlockStyle)
         $lineArray = $this->revertLiteralPlaceHolder ($lineArray, $literalBlock);
 
@@ -382,7 +383,8 @@ class Spyc {
     if (!$line) return array();
     $array = array();
 
-    if ($group = $this->nodeContainsGroup($line)) {
+    $group = $this->nodeContainsGroup($line);
+    if ($group) {
       $this->addGroup($line, $group);
       $line = $this->stripGroup ($line, $group);
     }
@@ -424,8 +426,10 @@ class Spyc {
 
     if (preg_match('/^("(.*)"|\'(.*)\')/',$value,$matches)) {
       $value = (string)preg_replace('/(\'\'|\\\\\')/',"'",end($matches));
-      $value = preg_replace('/\\\\"/','"',$value);
-    } elseif (preg_match('/^\\[\s*(.+?)\s*\\]$/',$value,$matches)) {
+      return preg_replace('/\\\\"/','"',$value);
+    }
+
+    if (preg_match('/^\\[\s*(.+?)\s*\\]$/',$value,$matches)) {
       // Inline Sequence
 
       // Take out strings sequences and mappings
@@ -436,15 +440,20 @@ class Spyc {
       foreach ($explode as $v) {
         $value[] = $this->_toType($v);
       }
-    } elseif (strpos($value,': ')!==false && !preg_match('/^{(.+)/',$value)) {
+      return $value;
+    }
+
+    if (strpos($value,': ')!==false && !preg_match('/^{(.+)/',$value)) {
       // It's a map
       $array = explode(': ',$value);
       $key   = trim($array[0]);
       array_shift($array);
       $value = trim(implode(': ',$array));
       $value = $this->_toType($value);
-      $value = array($key => $value);
-    } elseif (preg_match("/{(.+)}$/",$value,$matches)) {
+      return array($key => $value);
+    }
+    
+    if (preg_match("/{(.+)}$/",$value,$matches)) {
       // Inline Mapping
 
       // Take out strings sequences and mappings
@@ -460,30 +469,37 @@ class Spyc {
         }
         $array[] = $SubArr;
       }
-      $value = $array;
-    } elseif (strtolower($value) == 'null' or $value == '' or $value == '~') {
-      $value = null;
-    } elseif (preg_match ('/^[1-9]+[0-9]*$/', $value)) {
+      return $array;
+    }
+
+    if (strtolower($value) == 'null' or $value == '' or $value == '~') {
+      return null;
+    }
+
+    if (preg_match ('/^[1-9]+[0-9]*$/', $value)) {
       $intvalue = (int)$value;
       if ($intvalue != PHP_INT_MAX)
         $value = $intvalue;
-    } elseif (in_array(strtolower($value),
-    array('true', 'on', '+', 'yes', 'y'))) {
-      $value = true;
-    } elseif (in_array(strtolower($value),
-    array('false', 'off', '-', 'no', 'n'))) {
-      $value = false;
-    } elseif (is_numeric($value)) {
+      return $value;
+    }
+
+    if (in_array(strtolower($value),
+                 array('true', 'on', '+', 'yes', 'y'))) {
+      return true;
+    }
+
+    if (in_array(strtolower($value),
+                 array('false', 'off', '-', 'no', 'n'))) {
+      return false;
+    }
+
+    if (is_numeric($value)) {
       if ($value === '0') return 0;
       if (trim ($value, 0) === $value)
         $value = (float)$value;
-    } else {
-      // Just a normal string, right?
-
+      return $value;
     }
-
-
-    //  print_r ($value);
+    
     return $value;
   }
 
@@ -498,6 +514,8 @@ class Spyc {
     // pure mappings and mappings with sequences inside can't go very
     // deep.  This needs to be fixed.
 
+    $seqs = array();
+    $maps = array();
     $saved_strings = array();
 
     // Check for strings
@@ -523,24 +541,27 @@ class Spyc {
     $explode = explode(', ',$inline);
 
 
+    $seqi = 0; $mapi = 0; $stringi = 0; $i = 0;
+    while (1) {
+
     // Re-add the sequences
     if (!empty($seqs)) {
-      $i = 0;
       foreach ($explode as $key => $value) {
         if (strpos($value,'YAMLSeq') !== false) {
-          $explode[$key] = str_replace('YAMLSeq',$seqs[$i],$value);
-          ++$i;
+          $explode[$key] = str_replace('YAMLSeq',$seqs[$seqi],$value);
+          unset ($seqs[$seqi]);
+          ++$seqi;
         }
       }
     }
 
     // Re-add the mappings
     if (!empty($maps)) {
-      $i = 0;
       foreach ($explode as $key => $value) {
         if (strpos($value,'YAMLMap') !== false) {
-          $explode[$key] = str_replace('YAMLMap',$maps[$i],$value);
-          ++$i;
+          $explode[$key] = str_replace('YAMLMap',$maps[$mapi],$value);
+          unset ($maps[$mapi]);
+          ++$mapi;
         }
       }
     }
@@ -548,14 +569,33 @@ class Spyc {
 
     // Re-add the strings
     if (!empty($saved_strings)) {
-      $i = 0;
       foreach ($explode as $key => $value) {
         while (strpos($value,'YAMLString') !== false) {
-          $explode[$key] = preg_replace('/YAMLString/',$saved_strings[$i],$value, 1);
-          ++$i;
+          $explode[$key] = preg_replace('/YAMLString/',$saved_strings[$stringi],$value, 1);
+          unset($saved_strings[$stringi]);
+          ++$stringi;
           $value = $explode[$key];
         }
       }
+    }
+
+    $finished = true;
+    foreach ($explode as $key => $value) {
+      if (strpos($value,'YAMLSeq') !== false) {
+        $finished = false; break;
+      }
+      if (strpos($value,'YAMLMap') !== false) {
+        $finished = false; break;
+      }
+      if (strpos($value,'YAMLString') !== false) {
+        $finished = false; break;
+      }
+    }
+    if ($finished) break;
+
+    $i++;
+    if ($i > 10) 
+      break; // Prevent infinite loops.
     }
 
     return $explode;
@@ -799,7 +839,6 @@ class Spyc {
         array_shift($explode);
         $value   = trim(implode(':',$explode));
       }
-
       // Set the type of the value.  Int, string, etc
       $value = $this->_toType($value);
       if (empty($key)) {
