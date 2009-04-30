@@ -307,12 +307,15 @@ class Spyc {
     for ($i = 0; $i < count($Source); $i++) {
       $line = $Source[$i];
       
-      $lineIndent = $this->_getIndent($line);
-      $this->path = $this->getParentPathByIndent($lineIndent);
+      $lineIndent = self::_getIndent($line);
+      $tempPath = $this->getParentPathByIndent($lineIndent);
       $line = $this->stripIndent($line, $lineIndent);
-      if ($this->isComment($line)) continue;
+      if (self::isComment($line)) continue;
+      if (self::isEmpty($line)) continue;
+      $this->path = $tempPath;
 
-      if ($literalBlockStyle = $this->startsLiteralBlock($line)) {
+      $literalBlockStyle = $this->startsLiteralBlock($line);
+      if ($literalBlockStyle) {
         $line = rtrim ($line, $literalBlockStyle . " \n");
         $literalBlock = '';
         $line .= $this->LiteralPlaceHolder;
@@ -324,7 +327,7 @@ class Spyc {
       }
       $lineArray = $this->_parseLine($line);
       if ($literalBlockStyle)
-      $lineArray = $this->revertLiteralPlaceHolder ($lineArray, $literalBlock);
+        $lineArray = $this->revertLiteralPlaceHolder ($lineArray, $literalBlock);
 
       $this->addArray($lineArray, $lineIndent);
     }
@@ -338,7 +341,7 @@ class Spyc {
     return $this->loadFromString($input);
   }
 
-  function loadFromString ($input) {
+  private function loadFromString ($input) {
     $lines = explode("\n",$input);
     foreach ($lines as $k => $_) {
       $lines[$k] = trim ($_, "\r");
@@ -352,7 +355,7 @@ class Spyc {
      * @return int
      * @param string $line A line from the YAML file
      */
-  private function _getIndent($line) {
+  private static function _getIndent($line) {
     if (!preg_match('/^ +/',$line,$match)) return 0;
     if (!empty($match[0])) return strlen ($match[0]);
     return 0;
@@ -551,7 +554,7 @@ class Spyc {
 
   private function literalBlockContinues ($line, $lineIndent) {
     if (!trim($line)) return true;
-    if ($this->_getIndent($line) > $lineIndent) return true;
+    if (self::_getIndent($line) > $lineIndent) return true;
     return false;
   }
 
@@ -666,7 +669,7 @@ class Spyc {
    }
 
   private function stripIndent ($line, $indent = -1) {
-    if ($indent == -1) $indent = $this->_getIndent($line);
+    if ($indent == -1) $indent = self::_getIndent($line);
     return substr ($line, $indent);
   }
 
@@ -697,11 +700,17 @@ class Spyc {
   }
 
 
-  private function isComment ($line) {
+  private static function isComment ($line) {
     if (preg_match('/^#/', $line)) return true;
     if (trim($line, " \r\n\t") == '---') return true;
     return false;
   }
+
+  private static function isEmpty ($line) {
+    if (preg_match('/^\s+$/', $line)) return true;
+    return false;
+  }
+
 
   private function isArrayElement ($line) {
     if (!$line) return false;

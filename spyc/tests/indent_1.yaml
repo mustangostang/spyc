@@ -1,0 +1,10 @@
+root:
+  child_1: 2
+
+  child_2: 0
+  child_3: 1
+
+root2:
+  child_1: 1
+# A comment
+  child_2: 2
