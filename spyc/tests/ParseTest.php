@@ -1,5 +1,6 @@
 <?php
 
+require_once 'PHPUnit/Framework.php';
 require_once ("../spyc.php");
 
 class ParseTest extends PHPUnit_Framework_TestCase {
@@ -11,190 +12,202 @@ class ParseTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testNumericKey() {
-      $this->assertEquals ($this->yaml[1040], "Ooo, a numeric key!");
+      $this->assertEquals ("Ooo, a numeric key!", $this->yaml[1040]);
     }
 
     public function testMappingsString() {
-      $this->assertEquals ($this->yaml['String'], "Anyone's name, really.");
+      $this->assertEquals ("Anyone's name, really.", $this->yaml['String']);
     }
 
     public function testMappingsInt() {
-      $this->assertSame ($this->yaml['Int'], 13);
+      $this->assertSame (13, $this->yaml['Int']);
     }
 
     public function testMappingsBooleanTrue() {
-      $this->assertSame ($this->yaml['True'], true);
+      $this->assertSame (true, $this->yaml['True']);
     }
 
     public function testMappingsBooleanFalse() {
-      $this->assertSame ($this->yaml['False'], false);
+      $this->assertSame (false, $this->yaml['False']);
     }
 
     public function testMappingsZero() {
-      $this->assertSame ($this->yaml['Zero'], 0);
+      $this->assertSame (0, $this->yaml['Zero']);
     }
 
     public function testMappingsNull() {
-      $this->assertSame ($this->yaml['Null'], null);
+      $this->assertSame (null, $this->yaml['Null']);
     }
 
     public function testMappingsFloat() {
-      $this->assertSame ($this->yaml['Float'], 5.34);
+      $this->assertSame (5.34, $this->yaml['Float']);
     }
 
     public function testSeq0() {
-      $this->assertEquals ($this->yaml[0], "PHP Class");
+      $this->assertEquals ("PHP Class", $this->yaml[0]);
     }
 
     public function testSeq1() {
-      $this->assertEquals ($this->yaml[1], "Basic YAML Loader");
+      $this->assertEquals ("Basic YAML Loader", $this->yaml[1]);
     }
 
     public function testSeq2() {
-      $this->assertEquals ($this->yaml[2], "Very Basic YAML Dumper");
+      $this->assertEquals ("Very Basic YAML Dumper", $this->yaml[2]);
     }
 
     public function testSeq3() {
-      $this->assertEquals ($this->yaml[3], array("YAML is so easy to learn.",
-											"Your config files will never be the same."));
+      $this->assertEquals (array("YAML is so easy to learn.",
+											"Your config files will never be the same."), $this->yaml[3]);
     }
 
     public function testSeqMap() {
-      $this->assertEquals ($this->yaml[4], array("cpu" => "1.5ghz", "ram" => "1 gig",
-											"os" => "os x 10.4.1"));
+      $this->assertEquals (array("cpu" => "1.5ghz", "ram" => "1 gig",
+											"os" => "os x 10.4.1"), $this->yaml[4]);
     }
 
     public function testMappedSequence() {
-      $this->assertEquals ($this->yaml['domains'], array("yaml.org", "php.net"));
+      $this->assertEquals (array("yaml.org", "php.net"), $this->yaml['domains']);
     }
 
     public function testAnotherSequence() {
-      $this->assertEquals ($this->yaml[5], array("program" => "Adium", "platform" => "OS X",
-											"type" => "Chat Client"));
+      $this->assertEquals (array("program" => "Adium", "platform" => "OS X",
+											"type" => "Chat Client"), $this->yaml[5]);
     }
 
     public function testFoldedBlock() {
-      $this->assertEquals ($this->yaml['no time'], "There isn't any time for your tricks!\nDo you understand?");
+      $this->assertEquals ("There isn't any time for your tricks!\nDo you understand?", $this->yaml['no time']);
     }
 
     public function testLiteralAsMapped() {
-      $this->assertEquals ($this->yaml['some time'], "There is nothing but time\nfor your tricks.");
+      $this->assertEquals ("There is nothing but time\nfor your tricks.", $this->yaml['some time']);
     }
 
     public function testCrazy() {
-      $this->assertEquals ($this->yaml['databases'], array( array("name" => "spartan", "notes" =>
+      $this->assertEquals (array( array("name" => "spartan", "notes" =>
 																			array( "Needs to be backed up",
 																						 "Needs to be normalized" ),
-																			 "type" => "mysql" )));
+																			 "type" => "mysql" )), $this->yaml['databases']);
     }
 
     public function testColons() {
-      $this->assertEquals ($this->yaml["if: you'd"], "like");
+      $this->assertEquals ("like", $this->yaml["if: you'd"]);
     }
 
     public function testInline() {
-      $this->assertEquals ($this->yaml[6], array("One", "Two", "Three", "Four"));
+      $this->assertEquals (array("One", "Two", "Three", "Four"), $this->yaml[6]);
     }
 
     public function testNestedInline() {
-      $this->assertEquals ($this->yaml[7], array("One", array("Two", "And", "Three"), "Four", "Five"));
+      $this->assertEquals (array("One", array("Two", "And", "Three"), "Four", "Five"), $this->yaml[7]);
     }
 
     public function testNestedNestedInline() {
-      $this->assertEquals ($this->yaml[8], array( "This", array("Is", "Getting", array("Ridiculous", "Guys")),
-									"Seriously", array("Show", "Mercy")));
+      $this->assertEquals (array( "This", array("Is", "Getting", array("Ridiculous", "Guys")),
+									"Seriously", array("Show", "Mercy")), $this->yaml[8]);
     }
 
     public function testInlineMappings() {
-      $this->assertEquals ($this->yaml[9], array("name" => "chris", "age" => "young", "brand" => "lucky strike"));
+      $this->assertEquals (array("name" => "chris", "age" => "young", "brand" => "lucky strike"), $this->yaml[9]);
     }
 
     public function testNestedInlineMappings() {
-      $this->assertEquals ($this->yaml[10], array("name" => "mark", "age" => "older than chris",
-											 "brand" => array("marlboro", "lucky strike")));
+      $this->assertEquals (array("name" => "mark", "age" => "older than chris",
+											 "brand" => array("marlboro", "lucky strike")), $this->yaml[10]);
     }
 
     public function testReferences() {
-      $this->assertEquals ($this->yaml['dynamic languages'], array('Perl', 'Python', 'PHP', 'Ruby'));
+      $this->assertEquals (array('Perl', 'Python', 'PHP', 'Ruby'), $this->yaml['dynamic languages']);
     }
 
     public function testReferences2() {
-      $this->assertEquals ($this->yaml['compiled languages'], array('C/C++', 'Java'));
+      $this->assertEquals (array('C/C++', 'Java'), $this->yaml['compiled languages']);
     }
 
     public function testReferences3() {
-      $this->assertEquals ($this->yaml['all languages'], array(
+      $this->assertEquals (array(
 																		array('Perl', 'Python', 'PHP', 'Ruby'),
 																		array('C/C++', 'Java')
-																	 ));
+																	 ), $this->yaml['all languages']);
     }
 
     public function testEscapedQuotes() {
-      $this->assertEquals ($this->yaml[11],  "you know, this shouldn't work.  but it does.");
+      $this->assertEquals ("you know, this shouldn't work.  but it does.", $this->yaml[11]);
     }
 
     public function testEscapedQuotes_2() {
-      $this->assertEquals ($this->yaml[12],  "that's my value.");
+      $this->assertEquals ( "that's my value.", $this->yaml[12]);
     }
 
     public function testEscapedQuotes_3() {
-      $this->assertEquals ($this->yaml[13],  "again, that's my value.");
+      $this->assertEquals ("again, that's my value.", $this->yaml[13]);
     }
 
     public function testQuotes() {
-      $this->assertEquals ($this->yaml[14],  "here's to \"quotes\", boss.");
+      $this->assertEquals ("here's to \"quotes\", boss.", $this->yaml[14]);
     }
 
     public function testQuoteSequence() {
-      $this->assertEquals ($this->yaml[15],  array( 'name' => "Foo, Bar's", 'age' => 20));
+      $this->assertEquals ( array( 'name' => "Foo, Bar's", 'age' => 20), $this->yaml[15]);
     }
 
     public function testShortSequence() {
-      $this->assertEquals ($this->yaml[16],  array( 0 => "a", 1 => array (0 => 1, 1 => 2), 2 => "b"));
+      $this->assertEquals (array( 0 => "a", 1 => array (0 => 1, 1 => 2), 2 => "b"), $this->yaml[16]);
     }
 
     public function testHash_1() {
-      $this->assertEquals ($this->yaml['hash_1'],  "Hash");
+      $this->assertEquals ("Hash", $this->yaml['hash_1']);
     }
 
     public function testHash_2() {
-      $this->assertEquals ($this->yaml['hash_2'],  'Hash #and a comment');
+      $this->assertEquals ('Hash #and a comment', $this->yaml['hash_2']);
     }
 
     public function testHash_3() {
-      $this->assertEquals ($this->yaml['hash#3'],  'Hash (#) can appear in key too');
+      $this->assertEquals ('Hash (#) can appear in key too', $this->yaml['hash#3']);
     }
 
     public function testEndloop() {
-      $this->assertEquals ($this->yaml['endloop'],  "Does this line in the end indeed make Spyc go to an infinite loop?");
+      $this->assertEquals ("Does this line in the end indeed make Spyc go to an infinite loop?", $this->yaml['endloop']);
     }
 
     public function testReallyLargeNumber() {
-      $this->assertEquals ($this->yaml['a_really_large_number'],  '115792089237316195423570985008687907853269984665640564039457584007913129639936');
+      $this->assertEquals ('115792089237316195423570985008687907853269984665640564039457584007913129639936', $this->yaml['a_really_large_number']);
     }
 
     public function testFloatWithZeros() {
-      $this->assertSame ($this->yaml['float_test'],  '1.0');
+      $this->assertSame ('1.0', $this->yaml['float_test']);
     }
 
     public function testFloatWithQuotes() {
-      $this->assertSame ($this->yaml['float_test_with_quotes'],  '1.0');
+      $this->assertSame ('1.0', $this->yaml['float_test_with_quotes']);
     }
 
     public function testFloatInverse() {
-      $this->assertEquals ($this->yaml['float_inverse_test'],  '001');
+      $this->assertEquals ('001', $this->yaml['float_inverse_test']);
     }
 
     public function testIntArray() {
-      $this->assertEquals ($this->yaml['int array'], array (1, 2, 3));
+      $this->assertEquals (array (1, 2, 3), $this->yaml['int array']);
     }
 
     public function testArrayOnSeveralLines() {
-      $this->assertEquals ($this->yaml['array on several lines'], array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19));
+      $this->assertEquals (array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19), $this->yaml['array on several lines']);
     }
 
     public function testmoreLessKey() {
-      $this->assertEquals ($this->yaml['morelesskey'], '<value>');
+      $this->assertEquals ('<value>', $this->yaml['morelesskey']);
+    }
+
+    public function testArrayOfZero() {
+      $this->assertSame (array(0), $this->yaml['array_of_zero']);
+    }
+
+    public function testSophisticatedArrayOfZero() {
+      $this->assertSame (array('rx' => array ('tx' => array (0))), $this->yaml['sophisticated_array_of_zero']);
+    }
+
+    public function testSwitches() {
+      $this->assertEquals (array (array ('row' => 0, 'col' => 0, 'func' => array ('tx' => array(0, 1)))), $this->yaml['switches']);
     }
 
 }
