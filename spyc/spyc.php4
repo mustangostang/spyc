@@ -215,6 +215,7 @@ class Spyc {
       $string = $spaces.'- '.$value."\n";
     } else {
       // It's mapped
+      if (strpos($key, ":") !== false) { $key = '"' . $key . '"'; }
       $string = $spaces.$key.': '.$value."\n";
     }
     return $string;
