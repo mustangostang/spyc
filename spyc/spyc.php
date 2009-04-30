@@ -412,7 +412,7 @@ class Spyc {
       $value = $array;
     } elseif (strtolower($value) == 'null' or $value == '' or $value == '~') {
       $value = null;
-    } elseif (preg_match ('/^[0-9]+$/', $value)) {
+    } elseif (preg_match ('/^[1-9]+[0-9]*$/', $value)) {
       $intvalue = (int)$value;
       if ($intvalue != PHP_INT_MAX)
         $value = $intvalue;
@@ -423,7 +423,9 @@ class Spyc {
     array('false', 'off', '-', 'no', 'n'))) {
       $value = false;
     } elseif (is_numeric($value)) {
-      $value = (float)$value;
+      if ($value === '0') return 0;
+      if (trim ($value, 0) === $value)
+        $value = (float)$value;
     } else {
       // Just a normal string, right?
 

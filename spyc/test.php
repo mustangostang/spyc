@@ -168,6 +168,17 @@ if ($yaml['endloop'] != "Does this line in the end indeed make Spyc go to an inf
 if ($yaml['a_really_large_number'] != "115792089237316195423570985008687907853269984665640564039457584007913129639936")
 	die("[a_really_large_number] failed.");
 
-print "spyc.yaml parsed correctly\n";
+if ($yaml['float_test'] != '1.0')
+  die ("[float_test] failed");
 
-# print_r ($yaml);
+if ($yaml['float_test_with_quotes'] != '1.0')
+  die ("[float_test_with_quotes] failed");
+
+if ($yaml['float_inverse_test'] != '001')
+  die ("[float_inverse_test] failed");
+
+
+print "YAML parse result:\n";
+print_r ($yaml);
+
+print "\n\nspyc.yaml parsed correctly\n";
