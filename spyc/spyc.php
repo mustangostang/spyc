@@ -45,6 +45,12 @@ class Spyc {
   private $LiteralBlockMarkers = array ('>', '|');
   private $LiteralPlaceHolder = '___YAML_Literal_Block___';
   private $SavedGroups = array();
+  private $indent;
+  /**
+   * Path modifier that should be applied after adding current element.
+   * @var array
+   */
+  private $delayedPath = array();
 
   /**#@+
   * @access public
@@ -308,9 +314,9 @@ class Spyc {
     for ($i = 0; $i < count($Source); $i++) {
       $line = $Source[$i];
       
-      $lineIndent = self::_getIndent($line);
-      $tempPath = $this->getParentPathByIndent($lineIndent);
-      $line = $this->stripIndent($line, $lineIndent);
+      $this->indent = self::_getIndent($line);
+      $tempPath = $this->getParentPathByIndent($this->indent);
+      $line = $this->stripIndent($line, $this->indent);
       if (self::isComment($line)) continue;
       if (self::isEmpty($line)) continue;
       $this->path = $tempPath;
@@ -321,7 +327,7 @@ class Spyc {
         $literalBlock = '';
         $line .= $this->LiteralPlaceHolder;
 
-        while (++$i < count($Source) && $this->literalBlockContinues($Source[$i], $lineIndent)) {
+        while (++$i < count($Source) && $this->literalBlockContinues($Source[$i], $this->indent)) {
           $literalBlock = $this->addLiteralLine($literalBlock, $Source[$i], $literalBlockStyle);
         }
         $i--;
@@ -339,7 +345,13 @@ class Spyc {
       if ($literalBlockStyle)
         $lineArray = $this->revertLiteralPlaceHolder ($lineArray, $literalBlock);
 
-      $this->addArray($lineArray, $lineIndent);
+      $this->addArray($lineArray, $this->indent);
+
+      foreach ($this->delayedPath as $delayedPath)
+        $this->path[] = $delayedPath;
+
+      $this->delayedPath = array();
+
     }
     return $this->result;
   }
@@ -629,9 +641,7 @@ class Spyc {
     if ($array[$key] === array()) { $array[$key] = ''; };
     $value = $array[$key];
 
-    // Unfolding inner array tree as defined in $this->_arrpath.
-    //$_arr = $this->result; $_tree[0] = $_arr; $i = 1;
-
+    // Unfolding inner array tree.
     $tempPath = Spyc::flatten ($this->path);
     eval ('$_arr = $this->result' . $tempPath . ';');
 
@@ -648,7 +658,7 @@ class Spyc {
 
     // Adding string or numeric key to the innermost level or $this->arr.
     if ($key)
-    $_arr[$key] = $value;
+      $_arr[$key] = $value;
     else {
       if (!is_array ($_arr)) { $_arr = array ($value); $key = 0; }
       else { $_arr[] = $value; end ($_arr); $key = key ($_arr); }
@@ -668,7 +678,7 @@ class Spyc {
   }
 
 
-  private function flatten ($array) {
+  private static function flatten ($array) {
     $tempPath = array();
     if (!empty ($array)) {
       foreach ($array as $_) {
@@ -798,8 +808,9 @@ class Spyc {
   private function returnMappedSequence ($line) {
     $array = array();
     $key         = trim(substr(substr($line,1),0,-1));
-    $array[$key] = '';
-    return $array;
+    $array[$key] = array();
+    $this->delayedPath = array($key);
+    return array($array);
   }
 
   private function returnMappedValue ($line) {
