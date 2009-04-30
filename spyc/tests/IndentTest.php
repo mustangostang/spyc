@@ -27,7 +27,31 @@ class IndentTest extends PHPUnit_Framework_TestCase {
           array ('resolutions' => array (1024 => 768)),
           array ('resolutions' => array (1920 => 1200)),
         ), $this->Y['displays']);
+    }
 
+    public function testIndent_5() {
+      $this->assertEquals (array (array (
+        'row' => 0,
+        'col' => 0,
+        'headsets_affected' => array (
+            array (
+              'ports' => array (0),
+              'side' => 'left',
+            )
+        ),
+        'switch_function' => array (
+          'ics_ptt' => true
+        )
+      )), $this->Y['nested_hashes_and_seqs']);
+    }
+
+    public function testIndent_6() {
+      $this->assertEquals (array (
+        'h' => array (
+          array ('a' => 'b', 'a1' => 'b1'),
+          array ('c' => 'd')
+        )
+      ), $this->Y['easier_nest']);
     }
 
 }

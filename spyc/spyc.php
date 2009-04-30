@@ -553,31 +553,38 @@ class Spyc {
     }
     unset($regex);
 
+    $i = 0;
+    do {
+
     // Check for sequences
-    if (preg_match_all('/\[(.+)\]/U',$inline,$seqs)) {
-      $inline = preg_replace('/\[(.+)\]/U','YAMLSeq',$inline);
-      $seqs   = $seqs[0];
+    while (preg_match('/\[([^{}\[\]]+)\]/U',$inline,$matchseqs)) {
+      $seqs[] = $matchseqs[0];
+      $inline = preg_replace('/\[([^{}\[\]]+)\]/U', ('YAMLSeq' . (count($seqs) - 1) . 's'), $inline, 1);
     }
 
     // Check for mappings
-    if (preg_match_all('/{(.+)}/U',$inline,$maps)) {
-      $inline = preg_replace('/{(.+)}/U','YAMLMap',$inline);
-      $maps   = $maps[0];
+    while (preg_match('/{([^\[\]{}]+)}/U',$inline,$matchmaps)) {
+      $maps[] = $matchmaps[0];
+      $inline = preg_replace('/{([^\[\]{}]+)}/U', ('YAMLMap' . (count($maps) - 1) . 's'), $inline, 1);
     }
 
+    if ($i++ >= 10) break;
+
+    } while (strpos ($inline, '[') !== false || strpos ($inline, '{') !== false);
+
     $explode = explode(', ',$inline);
+    $stringi = 0; $i = 0;
 
-
-    $seqi = 0; $mapi = 0; $stringi = 0; $i = 0;
     while (1) {
 
     // Re-add the sequences
     if (!empty($seqs)) {
       foreach ($explode as $key => $value) {
         if (strpos($value,'YAMLSeq') !== false) {
-          $explode[$key] = str_replace('YAMLSeq',$seqs[$seqi],$value);
-          unset ($seqs[$seqi]);
-          ++$seqi;
+          foreach ($seqs as $seqk => $seq) {
+            $explode[$key] = str_replace(('YAMLSeq'.$seqk.'s'),$seq,$value);
+            $value = $explode[$key];
+          }
         }
       }
     }
@@ -586,9 +593,10 @@ class Spyc {
     if (!empty($maps)) {
       foreach ($explode as $key => $value) {
         if (strpos($value,'YAMLMap') !== false) {
-          $explode[$key] = str_replace('YAMLMap',$maps[$mapi],$value);
-          unset ($maps[$mapi]);
-          ++$mapi;
+          foreach ($maps as $mapk => $map) {
+            $explode[$key] = str_replace(('YAMLMap'.$mapk.'s'), $map, $value);
+            $value = $explode[$key];
+          }
         }
       }
     }
