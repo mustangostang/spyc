@@ -329,7 +329,7 @@ class Spyc {
     for ($i = 0; $i < count($Source); $i++) {
       $line = $Source[$i];
       
-      $this->indent = self::_getIndent($line);
+      $this->indent = strlen($line) - strlen(ltrim($line));
       $tempPath = $this->getParentPathByIndent($this->indent);
       $line = $this->stripIndent($line, $this->indent);
       if (self::isComment($line)) continue;
@@ -384,18 +384,6 @@ class Spyc {
       $lines[$k] = trim ($_, "\r");
     }
     return $lines;
-  }
-
-  /**
-     * Finds and returns the indentation of a YAML line
-     * @access private
-     * @return int
-     * @param string $line A line from the YAML file
-     */
-  private static function _getIndent($line) {
-    if (!preg_match('/^ +/',$line,$match)) return 0;
-    if (!empty($match[0])) return strlen ($match[0]);
-    return 0;
   }
 
   /**
@@ -635,7 +623,7 @@ class Spyc {
 
   private function literalBlockContinues ($line, $lineIndent) {
     if (!trim($line)) return true;
-    if (self::_getIndent($line) > $lineIndent) return true;
+    if (strlen($line) - strlen(ltrim($line)) > $lineIndent) return true;
     return false;
   }
 
@@ -757,7 +745,7 @@ class Spyc {
    }
 
   private function stripIndent ($line, $indent = -1) {
-    if ($indent == -1) $indent = self::_getIndent($line);
+    if ($indent == -1) $indent = strlen($line) - strlen(ltrim($line));
     return substr ($line, $indent);
   }
 
