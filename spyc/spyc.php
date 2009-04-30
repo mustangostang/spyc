@@ -224,7 +224,8 @@ class Spyc {
      */
   private function _dumpNode($key, $value, $indent, $previous_key = -1) {
     // do some folding here, for blocks
-    if (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false || strpos($value,"#") !== false) {
+    if (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false || 
+      strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false) {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
       $value  = $this->_doFolding($value,$indent);
