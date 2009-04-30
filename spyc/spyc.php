@@ -177,18 +177,18 @@ class Spyc {
      * @param $value The value of the item
      * @param $indent The indent of the current node
      */
-  private function _yamlize($key,$value,$indent) {
+  private function _yamlize($key,$value,$indent, $previous_key = -1) {
     if (is_array($value)) {
       // It has children.  What to do?
       // Make it the right kind of item
-      $string = $this->_dumpNode($key,NULL,$indent);
+      $string = $this->_dumpNode($key, NULL, $indent, $previous_key);
       // Add the indent
       $indent += $this->_dumpIndent;
       // Yamlize the array
       $string .= $this->_yamlizeArray($value,$indent);
     } elseif (!is_array($value)) {
       // It doesn't have children.  Yip.
-      $string = $this->_dumpNode($key,$value,$indent);
+      $string = $this->_dumpNode($key, $value, $indent, $previous_key);
     }
     return $string;
   }
@@ -203,8 +203,10 @@ class Spyc {
   private function _yamlizeArray($array,$indent) {
     if (is_array($array)) {
       $string = '';
+      $previous_key = -1;
       foreach ($array as $key => $value) {
-        $string .= $this->_yamlize($key,$value,$indent);
+        $string .= $this->_yamlize($key, $value, $indent, $previous_key);
+        $previous_key = $key;
       }
       return $string;
     } else {
@@ -220,7 +222,7 @@ class Spyc {
      * @param $value The value of the item
      * @param $indent The indent of the current node
      */
-  private function _dumpNode($key,$value,$indent) {
+  private function _dumpNode($key, $value, $indent, $previous_key = -1) {
     // do some folding here, for blocks
     if (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false) {
       $value = $this->_doLiteralBlock($value,$indent);
@@ -234,7 +236,7 @@ class Spyc {
 
     $spaces = str_repeat(' ',$indent);
 
-    if (is_int($key)) {
+    if (is_int($key) && $key - 1 == $previous_key) {
       // It's a sequence
       $string = $spaces.'- '.$value."\n";
     } else {
