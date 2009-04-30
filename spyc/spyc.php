@@ -311,7 +311,7 @@ class Spyc {
       if ($this->isComment($line)) continue;
 
       if ($literalBlockStyle = $this->startsLiteralBlock($line)) {
-        $line = rtrim ($line, $literalBlockStyle . "\n");
+        $line = rtrim ($line, $literalBlockStyle . " \n");
         $literalBlock = '';
         $line .= $this->LiteralPlaceHolder;
 
@@ -638,14 +638,15 @@ class Spyc {
 
   private function addLiteralLine ($literalBlock, $line, $literalBlockStyle) {
     $line = $this->stripIndent($line);
-    $line = str_replace ("\r\n", "\n", $line);
+    $line = rtrim ($line, "\r\n\t ") . "\n";
+    if ($line == "\n") $line = '';
 
     if ($literalBlockStyle == '|') {
       return $literalBlock . $line;
     }
-    if (strlen($line) == 0) return $literalBlock . "\n";
+    if (strlen($line) == 0)
+      return rtrim($literalBlock, ' ') . "\n";
 
-   // echo "|$line|";
     if ($line != "\n")
       $line = trim ($line, "\r\n ") . " ";
 

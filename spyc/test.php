@@ -81,8 +81,14 @@ if ($yaml[5] != array("program" => "Adium", "platform" => "OS X",
 	die('Sequence 5 failed');
 
 # A folded block as a mapped value
-if ($yaml['no time'] != "There isn't any time for your tricks! \nDo you understand?")
-	die("Key: 'no time' failed");
+$expected = "There isn't any time for your tricks!\nDo you understand?";
+if ($yaml['no time'] != $expected) {
+  echo "  Expected: ";
+  print_r ($expected);
+  echo "\n  Returned: ";
+  print_r ($yaml['no time']);
+	die("\n[!] Key: 'no time' failed\n");
+}
 
 # A literal block as a mapped value
 if ($yaml['some time'] != "There is nothing but time\nfor your tricks.")
