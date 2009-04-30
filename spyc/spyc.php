@@ -91,7 +91,7 @@ class Spyc {
      * @return array
      * @param string $input String containing YAML
      */
-  function YAMLLoadString($input) {
+  public static function YAMLLoadString($input) {
     $Spyc = new Spyc;
     return $Spyc->loadString($input);
   }
@@ -291,12 +291,12 @@ class Spyc {
     return $this->loadWithSource($Source);
   }
 
-  function loadString($input) {
+  private function loadString($input) {
     $Source = $this->loadFromString($input);
     return $this->loadWithSource($Source);
   }
 
-  function loadWithSource($Source) {
+  private function loadWithSource($Source) {
     if (empty ($Source)) return array();
     $this->path = array();
     $this->result = array();
