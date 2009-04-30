@@ -440,28 +440,27 @@ class Spyc {
      * @return mixed
      */
   private function _toType($value) {
+    if ($value === '') return null;
+    $first_character = substr($value, 0, 1);
+    $last_character = substr($value, -1, 1);
+
     $is_quoted = false;
     do {
       if (!$value) break;
-      if (substr($value, 0, 1) != '"' && substr($value, 0, 1) != "'") break;
-      if (substr($value, -1, 1) != '"' && substr($value, -1, 1) != "'") break;
+      if ($first_character != '"' && $first_character != "'") break;
+      if ($last_character != '"' && $last_character != "'") break;
       $is_quoted = true;
     } while (0);
 
-    if (!$is_quoted && strpos($value, ' #') !== false)
+    if ($is_quoted)
+      return strtr(substr ($value, 1, -1), array ('\\"' => '"', '\'\'' => '\'', '\\\'' => '\''));
+    
+    if (strpos($value, ' #') !== false)
       $value = preg_replace('/\s+#(.+)$/','',$value);
 
-    if (preg_match('/^("(.*)"|\'(.*)\')/',$value,$matches)) {
-      $value = (string)preg_replace('/(\'\'|\\\\\')/',"'",end($matches));
-      return preg_replace('/\\\\"/','"',$value);
-    }
-
-    if (preg_match('/^\\[\s*(.+?)\s*\\]$/',$value,$matches)) {
-      // Inline Sequence
-
+    if ($first_character == '[' && $last_character == ']') {
       // Take out strings sequences and mappings
-      $explode = $this->_inlineEscape($matches[1]);
-
+      $explode = $this->_inlineEscape(trim(substr ($value, 1, -1)));
       // Propagate value array
       $value  = array();
       foreach ($explode as $v) {
@@ -470,7 +469,7 @@ class Spyc {
       return $value;
     }
 
-    if (strpos($value,': ')!==false && !preg_match('/^{(.+)/',$value)) {
+    if (strpos($value,': ')!==false && $first_character != '{') {
       // It's a map
       $array = explode(': ',$value);
       $key   = trim($array[0]);
@@ -480,13 +479,11 @@ class Spyc {
       return array($key => $value);
     }
     
-    if (preg_match("/{(.+)}$/",$value,$matches)) {
+    if ($first_character == '{' && $last_character == '}') {
       // Inline Mapping
-
       // Take out strings sequences and mappings
-      $explode = $this->_inlineEscape($matches[1]);
-
-      // Propogate value array
+      $explode = $this->_inlineEscape(substr ($value, 1, -1));
+      // Propagate value array
       $array = array();
       foreach ($explode as $v) {
         $SubArr = $this->_toType($v);
@@ -503,7 +500,7 @@ class Spyc {
       return null;
     }
 
-    if (preg_match ('/^[1-9]+[0-9]*$/', $value)) {
+    if (intval($first_character) > 0 && preg_match ('/^[1-9]+[0-9]*$/', $value)) {
       $intvalue = (int)$value;
       if ($intvalue != PHP_INT_MAX)
         $value = $intvalue;
@@ -709,15 +706,12 @@ class Spyc {
 
   private static function flatten ($array) {
     $tempPath = array();
-    if (!empty ($array)) {
-      foreach ($array as $_) {
-        if (!is_int($_)) $_ = "'$_'";
-        $tempPath[] = "[$_]";
-      }
+    if (empty ($array)) return '';
+    foreach ($array as $_) {
+      if (!is_int($_)) $_ = '\'' . $_ . '\'';
+      $tempPath[] = '[' . $_ . ']';
     }
-    //end ($tempPath); $latestKey = key($tempPath);
-    $tempPath = implode ('', $tempPath);
-    return $tempPath;
+    return implode ('', $tempPath);
   }
 
 
