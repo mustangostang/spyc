@@ -165,8 +165,9 @@ if ($yaml['hash#3'] != 'Hash (#) can appear in key too')
 if ($yaml['endloop'] != "Does this line in the end indeed make Spyc go to an infinite loop?")
 	die("[endloop] failed.");
 
+if ($yaml['a_really_large_number'] != "115792089237316195423570985008687907853269984665640564039457584007913129639936")
+	die("[a_really_large_number] failed.");
+
 print "spyc.yaml parsed correctly\n";
 
-// print_r ($yaml);
-
-?>
+# print_r ($yaml);

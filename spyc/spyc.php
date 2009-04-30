@@ -413,7 +413,9 @@ class Spyc {
     } elseif (strtolower($value) == 'null' or $value == '' or $value == '~') {
       $value = null;
     } elseif (preg_match ('/^[0-9]+$/', $value)) {
-      $value = (int)$value;
+      $intvalue = (int)$value;
+      if ($intvalue != PHP_INT_MAX)
+        $value = $intvalue;
     } elseif (in_array(strtolower($value),
     array('true', 'on', '+', 'yes', 'y'))) {
       $value = true;
