@@ -153,9 +153,20 @@ if ($yaml[15] != array( 'name' => "Foo, Bar's", 'age' => 20))
 if ($yaml[16] != array( 0 => "a", 1 => array (0 => 1, 1 => 2), 2 => "b"))
 	die("Sequence 16 failed.");
 
+if ($yaml['hash_1'] != 'Hash')
+  die ("Hash 1 failed");
+
+if ($yaml['hash_2'] != 'Hash #and a comment')
+  die ("Hash 2 failed");
+
+if ($yaml['hash#3'] != 'Hash (#) can appear in key too')
+  die ("Hash 3 failed");
+
 if ($yaml['endloop'] != "Does this line in the end indeed make Spyc go to an infinite loop?")
 	die("[endloop] failed.");
 
 print "spyc.yaml parsed correctly\n";
+
+// print_r ($yaml);
 
 ?>

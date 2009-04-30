@@ -360,8 +360,15 @@ class Spyc {
      * @return mixed
      */
   private function _toType($value) {
+    $is_quoted = false;
+    do {
+      if (!$value) break;
+      if (substr($value, 0, 1) != '"' && substr($value, 0, 1) != "'") break;
+      if (substr($value, -1, 1) != '"' && substr($value, -1, 1) != "'") break;
+      $is_quoted = true;
+    } while (0);
 
-    if (strpos($value, '#') !== false)
+    if (!$is_quoted && strpos($value, '#') !== false)
       $value = trim(preg_replace('/#(.+)$/','',$value));
 
     if (preg_match('/^("(.*)"|\'(.*)\')/',$value,$matches)) {

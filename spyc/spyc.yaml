@@ -115,6 +115,10 @@ all
 # Added in .2
 1040: Ooo, a numeric key! # And working comments? Wow! Colons in comments: a menace (0.3).
 
+hash_1: Hash #and a comment
+hash_2: "Hash #and a comment"
+"hash#3": "Hash (#) can appear in key too"
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?
