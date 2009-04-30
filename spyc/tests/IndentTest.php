@@ -18,4 +18,8 @@ class IndentTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals (array ('child_1' => 1, 'child_2' => 2), $this->Y['root2']);
     }
 
+    public function testIndent_3() {
+      $this->assertEquals (array ('resolutions' => array (1024 => 768, 1920 => 1200), 'producer' => 'Nec'), $this->Y['display']);
+    }
+
 }
