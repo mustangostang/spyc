@@ -20,7 +20,7 @@ error_reporting(E_ALL);
 
 include('spyc.php4');
 
-$yaml = Spyc::YAMLLoad('spyc.yaml');
+$yaml = Spyc::YAMLLoad('../spyc.yaml');
 
 // print_r ($yaml);
 
