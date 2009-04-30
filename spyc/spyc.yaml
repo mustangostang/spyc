@@ -10,6 +10,8 @@
 #
 # spyc.yml - A file containing the YAML that Spyc understands.
 
+---
+
 # Mappings - with proper types
 String: Anyone's name, really.
 Int: 13
