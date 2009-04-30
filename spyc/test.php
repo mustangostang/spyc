@@ -182,3 +182,24 @@ print "YAML parse result:\n";
 print_r ($yaml);
 
 print "\n\nspyc.yaml parsed correctly\n";
+
+print "\nTesting YAMLDump():\n\n";
+
+$yaml_after_dump = Spyc::YAMLLoad (Spyc::YAMLDump ($yaml));
+if (is_file ('~test-spyc.yaml'))
+  unlink ('~test-spyc.yaml');
+
+
+if ($yaml_after_dump != $yaml) {
+  foreach (array_keys ($yaml) as $k) {
+      if ($yaml[$k] == $yaml_after_dump[$k])
+        continue;
+      print "\n-------\nError on key [$k]:";
+      print "\nOriginal:\n";
+      print_r ($yaml[$k]);
+      print "\nAfter dump-load cycle:\n";
+      print_r ($yaml_after_dump[$k]);
+  }
+  file_put_contents('~test-spyc.yaml', Spyc::YAMLDump ($yaml));
+  die ("Dump-load integrity failed.");
+}
