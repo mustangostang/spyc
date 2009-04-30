@@ -1,7 +1,7 @@
 <?php
 /**
    * Spyc -- A Simple PHP YAML Class
-   * @version 0.3
+   * @version 0.4
    * @author Chris Wanstrath <chris@ozmm.org>
    * @author Vlad Andersen <vlad@oneiros.ru>
    * @link http://spyc.sourceforge.net/
@@ -20,6 +20,10 @@
    * <code>
    *   $parser = new Spyc;
    *   $array  = $parser->load($file);
+   * </code>
+   * or:
+   * <code>
+   *   Spyc::YAMLLoad($file);
    * </code>
    * @package Spyc
    */

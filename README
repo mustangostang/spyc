@@ -1,19 +1,19 @@
 #
 #    S P Y C
 #      a simple php yaml class
-#   v0.3
+#   v0.4
 #
 # Load this README!
 # >> $readme = Spyc::YAMLLoad('README');
 #
 --- %YAML:1.1
 title: Spyc -- a Simple PHP YAML Class
-version: 0.3
+version: 0.4
 author: [chris wanstrath, chris@ozmm.org]
 websites: [http://www.yaml.org, http://spyc.sourceforge.net]
 license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
 copyright: (c) 2005-2006 Chris Wanstrath
-tested on: [php 4.3.11, php 5.0.4]
+tested on: [php 5.2]
 
 installation: >
   Copy spyc.php to a directory you can

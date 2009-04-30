@@ -1,14 +1,14 @@
 #
 #    S P Y C
 #      a simple php yaml class
-#   v0.3
+#   v0.4
 #
 # Load this file!
 # >> $changes = Spyc::YAMLLoad('CHANGES');
 #
 --- %YAML:1.1
 title: Spyc -- a Simple PHP YAML Class
-version: 0.3
+version: 0.4
 authors:
   - [Chris Wanstrath, chris@ozmm.org]
   - [Vlad Andersen, vlad@oneiros.ru]
@@ -18,10 +18,19 @@ copyright: (c) 2005-2009 Chris Wanstrath, Vlad Andersen
 
 changes:
 
+  0.4:
+    - Integrated PHPUnit tests.
+    - Fixed a bug with empty lines and comments indentation.
+    - Fixed multi-line sequences
+    - Fixed a bug with quotes ("<>")
+    - Fixed a bug with nested maps and sequences
+    - Fixed indenting and dedenting behaviour
+    - Multiple performance enhancements.
+
   0.3:
     - Spyc parsing engine is rewritten from scratch (one-pass parsing). It runs now _much_ faster.
     - A bug with colons in comments is fixed (thanks to Neil Galvin)
-    - Fixed: a bug when the source ends with a literal block, the scripts loops for ever, with an error message (index out of bound). Thanks to Pascal  Diethelm.
+    - Fixed a bug when the source ends with a literal block, the scripts loops for ever, with an error message (index out of bound). Thanks to Pascal  Diethelm.
     - Some more bugs in the engine are fixed.
     - Only alphanumeric characters are now allowed in reference names.
     - Fixed a bug with inline arrays (thanks Tobiah for pointing it out).
