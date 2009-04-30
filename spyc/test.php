@@ -18,7 +18,7 @@
 
 error_reporting(E_ALL && E_STRICT);
 
-include('spyc.php5');
+include('spyc.php');
 
 $yaml = Spyc::YAMLLoad('spyc.yaml');
 
