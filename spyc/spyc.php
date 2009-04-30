@@ -325,6 +325,14 @@ class Spyc {
         }
         $i--;
       }
+
+      while (++$i < count($Source) && self::greedilyNeedNextLine($line)) {
+        $line = rtrim ($line, " \n\t\r") . ' ' . ltrim ($Source[$i], " \t");
+      }
+      $i--;
+
+
+
       $lineArray = $this->_parseLine($line);
       if ($literalBlockStyle)
         $lineArray = $this->revertLiteralPlaceHolder ($lineArray, $literalBlock);
@@ -416,7 +424,7 @@ class Spyc {
     if (preg_match('/^("(.*)"|\'(.*)\')/',$value,$matches)) {
       $value = (string)preg_replace('/(\'\'|\\\\\')/',"'",end($matches));
       $value = preg_replace('/\\\\"/','"',$value);
-    } elseif (preg_match('/^\\[(.+)\\]$/',$value,$matches)) {
+    } elseif (preg_match('/^\\[\s*(.+?)\s*\\]$/',$value,$matches)) {
       // Inline Sequence
 
       // Take out strings sequences and mappings
@@ -638,6 +646,12 @@ class Spyc {
     $lastChar = substr (trim($line), -1);
     if (in_array ($lastChar, $this->LiteralBlockMarkers))
     return $lastChar;
+    return false;
+  }
+
+  private static function greedilyNeedNextLine($line) {
+    if (preg_match ('#^\s*\[#', $line) && !preg_match ('#\]\s*$#', $line))
+      return true;
     return false;
   }
 
