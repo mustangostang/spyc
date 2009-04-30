@@ -325,8 +325,8 @@ class Spyc {
     $this->path = array();
     $this->result = array();
 
-
-    for ($i = 0; $i < count($Source); $i++) {
+    $cnt = count($Source);
+    for ($i = 0; $i < $cnt; $i++) {
       $line = $Source[$i];
       
       $this->indent = strlen($line) - strlen(ltrim($line));
@@ -342,13 +342,13 @@ class Spyc {
         $literalBlock = '';
         $line .= $this->LiteralPlaceHolder;
 
-        while (++$i < count($Source) && $this->literalBlockContinues($Source[$i], $this->indent)) {
+        while (++$i < $cnt && $this->literalBlockContinues($Source[$i], $this->indent)) {
           $literalBlock = $this->addLiteralLine($literalBlock, $Source[$i], $literalBlockStyle);
         }
         $i--;
       }
 
-      while (++$i < count($Source) && self::greedilyNeedNextLine($line)) {
+      while (++$i < $cnt && self::greedilyNeedNextLine($line)) {
         $line = rtrim ($line, " \n\t\r") . ' ' . ltrim ($Source[$i], " \t");
       }
       $i--;
@@ -813,7 +813,7 @@ class Spyc {
 
   private function returnMappedSequence ($line) {
     $array = array();
-    $key         = trim(substr(substr($line,1),0,-1));
+    $key         = trim(substr($line,1,-1));
     $array[$key] = array();
     $this->delayedPath = array(strpos ($line, $key) + $this->indent => $key);
     return array($array);
@@ -889,8 +889,8 @@ class Spyc {
   }
 
   private function addGroup ($line, $group) {
-    if (substr ($group, 0, 1) == '&') $this->_containsGroupAnchor = substr ($group, 1);
-    if (substr ($group, 0, 1) == '*') $this->_containsGroupAlias = substr ($group, 1);
+    if ($group[0] == '&') $this->_containsGroupAnchor = substr ($group, 1);
+    if ($group[0] == '*') $this->_containsGroupAlias = substr ($group, 1);
     //print_r ($this->path);
   }
 
