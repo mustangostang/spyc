@@ -73,6 +73,30 @@ class Spyc {
   }
 
   /**
+     * Load a string of YAML into a PHP array statically
+     *
+     * The load method, when supplied with a YAML string, will do its best 
+     * to convert YAML in a string into a PHP array.  Pretty simple.
+     *
+     * Note: use this function if you don't want files from the file system
+     * loaded and processed as YAML.  This is of interest to people concerned
+     * about security whose input is from a string.
+     *
+     *  Usage:
+     *  <code>
+     *   $array = Spyc::YAMLLoadString("---\n0: hello world\n");
+     *   print_r($array);
+     *  </code>
+     * @access public
+     * @return array
+     * @param string $input String containing YAML
+     */
+  function YAMLLoadString($input) {
+    $Spyc = new Spyc;
+    return $Spyc->loadString($input);
+  }
+
+  /**
      * Dump YAML from PHP array statically
      *
      * The dump method, when supplied with an array, will do its best
@@ -264,6 +288,15 @@ class Spyc {
 
   private function load($input) {
     $Source = $this->loadFromSource($input);
+    return $this->loadWithSource($Source);
+  }
+
+  function loadString($input) {
+    $Source = $this->loadFromString($input);
+    return $this->loadWithSource($Source);
+  }
+
+  function loadWithSource($Source) {
     if (empty ($Source)) return array();
     $this->path = array();
     $this->result = array();
@@ -300,11 +333,15 @@ class Spyc {
     if (!empty($input) && strpos($input, "\n") === false && file_exists($input))
     return file($input);
 
-    $foo = explode("\n",$input);
-    foreach ($foo as $k => $_) {
-      $foo[$k] = trim ($_, "\r");
+    return $this->loadFromString($input);
+  }
+
+  function loadFromString ($input) {
+    $lines = explode("\n",$input);
+    foreach ($lines as $k => $_) {
+      $lines[$k] = trim ($_, "\r");
     }
-    return $foo;
+    return $lines;
   }
 
   /**
