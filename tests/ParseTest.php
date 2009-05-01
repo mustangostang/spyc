@@ -216,4 +216,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
           $Quotes);
     }
 
+    public function testFailingColons() {
+      $Failing = Spyc::YAMLLoad('failing1.yaml');
+      $this->assertSame (array ('MyObject' => array ('Prop1' => array ('key1:val1'))),
+          $Failing);
+    }
+
 }
