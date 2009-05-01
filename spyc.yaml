@@ -141,6 +141,11 @@ sophisticated_array_of_zero: {rx: {tx: [0]} }
 switches:
   - { row: 0, col: 0, func: {tx: [0, 1]} }
 
+empty_sequence: [ ]
+empty_hash: { }
+
+special_characters: "[{]]{{]]"
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?

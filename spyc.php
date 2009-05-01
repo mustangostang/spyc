@@ -200,6 +200,8 @@ class Spyc {
      */
   private function _yamlize($key,$value,$indent, $previous_key = -1) {
     if (is_array($value)) {
+      if (empty ($value))
+        return $this->_dumpNode($key, array(), $indent, $previous_key);
       // It has children.  What to do?
       // Make it the right kind of item
       $string = $this->_dumpNode($key, NULL, $indent, $previous_key);
@@ -246,7 +248,8 @@ class Spyc {
   private function _dumpNode($key, $value, $indent, $previous_key = -1) {
     // do some folding here, for blocks
     if (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false || 
-      strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false) {
+      strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
+      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
       $value  = $this->_doFolding($value,$indent);
@@ -255,7 +258,7 @@ class Spyc {
       }
     }
 
-    
+    if ($value === array()) $value = '[ ]';
 
     $spaces = str_repeat(' ',$indent);
 
@@ -451,7 +454,9 @@ class Spyc {
 
     if ($first_character == '[' && $last_character == ']') {
       // Take out strings sequences and mappings
-      $explode = $this->_inlineEscape(trim(substr ($value, 1, -1)));
+      $innerValue = trim(substr ($value, 1, -1));
+      if ($innerValue === '') return array();
+      $explode = $this->_inlineEscape($innerValue);
       // Propagate value array
       $value  = array();
       foreach ($explode as $v) {
@@ -461,7 +466,6 @@ class Spyc {
     }
 
     if (strpos($value,': ')!==false && $first_character != '{') {
-      // It's a map
       $array = explode(': ',$value);
       $key   = trim($array[0]);
       array_shift($array);
@@ -471,9 +475,11 @@ class Spyc {
     }
     
     if ($first_character == '{' && $last_character == '}') {
+      $innerValue = trim(substr ($value, 1, -1));
+      if ($innerValue === '') return array();
       // Inline Mapping
       // Take out strings sequences and mappings
-      $explode = $this->_inlineEscape(substr ($value, 1, -1));
+      $explode = $this->_inlineEscape($innerValue);
       // Propagate value array
       $array = array();
       foreach ($explode as $v) {
@@ -649,7 +655,6 @@ class Spyc {
     $key = key ($array);
     
     if (!isset ($array[$key])) return false;
-    if ($array[$key] === array()) { $array[$key] = ''; };
     $value = $array[$key];
 
     $tempPath = Spyc::flatten ($this->path);
