@@ -58,7 +58,6 @@ class Spyc {
   private $_containsGroupAlias = false;
   private $path;
   private $result;
-  private $LiteralBlockMarkers = array ('>', '|');
   private $LiteralPlaceHolder = '___YAML_Literal_Block___';
   private $SavedGroups = array();
   private $indent;
@@ -340,7 +339,7 @@ class Spyc {
       if (self::isEmpty($line)) continue;
       $this->path = $tempPath;
 
-      $literalBlockStyle = $this->startsLiteralBlock($line);
+      $literalBlockStyle = self::startsLiteralBlock($line);
       if ($literalBlockStyle) {
         $line = rtrim ($line, $literalBlockStyle . " \n");
         $literalBlock = '';
@@ -708,11 +707,13 @@ class Spyc {
 
 
 
-  private function startsLiteralBlock ($line) {
+  private static function startsLiteralBlock ($line) {
     $lastChar = substr (trim($line), -1);
-    if (in_array ($lastChar, $this->LiteralBlockMarkers))
+    if ($lastChar != '>' && $lastChar != '|') return false;
+    if ($lastChar == '|') return $lastChar;
+    // HTML tags should not be counted as literal blocks.
+    if (preg_match ('#<.*?>$#', $line)) return false;
     return $lastChar;
-    return false;
   }
 
   private static function greedilyNeedNextLine($line) {

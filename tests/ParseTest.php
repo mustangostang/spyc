@@ -210,4 +210,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals (array (array ('row' => 0, 'col' => 0, 'func' => array ('tx' => array(0, 1)))), $this->yaml['switches']);
     }
 
+    public function testAngleQuotes() {
+      $Quotes = Spyc::YAMLLoad('quotes.yaml');
+      $this->assertEquals (array ('html_tags' => array ('<br>', '<p>'), 'html_content' => array ('<p>hello world</p>', 'hello<br>world'), 'text_content' => array ('hello world')),
+          $Quotes);
+    }
+
 }
