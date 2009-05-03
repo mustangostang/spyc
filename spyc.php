@@ -1,7 +1,7 @@
 <?php
 /**
    * Spyc -- A Simple PHP YAML Class
-   * @version 0.4
+   * @version 0.4.1
    * @author Chris Wanstrath <chris@ozmm.org>
    * @author Vlad Andersen <vlad@oneiros.ru>
    * @link http://spyc.sourceforge.net/
