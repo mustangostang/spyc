@@ -9,6 +9,18 @@
    * @license http://www.opensource.org/licenses/mit-license.php MIT License
    * @package Spyc
    */
+
+if (!function_exists('spyc_load')) {
+  /**
+   * Parses YAML to array.
+   * @param string $string YAML string.
+   * @return array
+   */
+  function spyc_load ($string) {
+    return Spyc::YAMLLoadString($string);
+  }
+}
+
 /**
    * The Simple PHP YAML Class.
    *
