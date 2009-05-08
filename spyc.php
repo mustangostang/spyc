@@ -45,11 +45,18 @@ class Spyc {
 
   /**
    * Setting this to true will force YAMLDump to enclose any string value in
-   * quotes.
+   * quotes.  False by default.
    * 
    * @var bool
    */
   public $setting_dump_force_quotes = false;
+
+  /**
+   * Setting this to true will forse YAMLLoad to use syck_load function when
+   * possible. False by default.
+   * @var bool
+   */
+  public $setting_use_syck_is_possible = false;
 
 
 
@@ -340,6 +347,11 @@ class Spyc {
 
   private function loadWithSource($Source) {
     if (empty ($Source)) return array();
+    if ($this->setting_use_syck_is_possible && function_exists ('syck_load')) {
+      $array = syck_load ($Source);
+      return is_array($array) ? $array : array();
+    }
+
     $this->path = array();
     $this->result = array();
 
