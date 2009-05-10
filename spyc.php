@@ -690,11 +690,12 @@ class Spyc {
     }
 
 
-    $tempPath = Spyc::flatten ($this->path);
+    
+    $history = array();
     // Unfolding inner array tree.
-    $_arr = $this->result;
+    $history[] = $_arr = $this->result;
     foreach ($this->path as $k) {
-      $_arr = $_arr[$k];
+      $history[] = $_arr = $_arr[$k];
     }
 
     if ($this->_containsGroupAlias) {
@@ -718,10 +719,16 @@ class Spyc {
       else { $_arr[] = $value; end ($_arr); $key = key ($_arr); }
     }
 
-    $this->path[$incoming_indent] = $key;
+    $reverse_path = array_reverse($this->path);
+    $reverse_history = array_reverse ($history);
+    $reverse_history[0] = $_arr;
+    $cnt = count($reverse_history) - 1;
+    for ($i = 0; $i < $cnt; $i++) {
+      $reverse_history[$i+1][$reverse_path[$i]] = $reverse_history[$i];
+    }
+    $this->result = $reverse_history[$cnt];
 
-    
-    eval ('$this->result' . $tempPath . ' = $_arr;');
+    $this->path[$incoming_indent] = $key;
 
     if ($this->_containsGroupAnchor) {
       $this->SavedGroups[$this->_containsGroupAnchor] = $this->path;
@@ -730,19 +737,6 @@ class Spyc {
 
 
   }
-
-
-  private static function flatten ($array) {
-    $tempPath = array();
-    if (empty ($array)) return '';
-    foreach ($array as $_) {
-      if (!is_int($_)) $_ = '\'' . $_ . '\'';
-      $tempPath[] = '[' . $_ . ']';
-    }
-    return implode ('', $tempPath);
-  }
-
-
 
   private static function startsLiteralBlock ($line) {
     $lastChar = substr (trim($line), -1);
