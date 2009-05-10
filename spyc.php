@@ -671,15 +671,24 @@ class Spyc {
       return true;
   }
   
-  private function addArray ($array, $indent) {
+  private function addArray ($incoming_data, $incoming_indent) {
 
-    if (count ($array) > 1)
-      return $this->addArrayInline ($array, $indent);
+    if (count ($incoming_data) > 1)
+      return $this->addArrayInline ($incoming_data, $incoming_indent);
     
-    $key = key ($array);
-    
-    if (!isset ($array[$key])) return false;
-    $value = $array[$key];
+    $key = key ($incoming_data);
+    $value = $incoming_data[$key];
+
+    if ($incoming_indent == 0 && !$this->_containsGroupAlias && !$this->_containsGroupAnchor) { // Shortcut for root-level values.
+      if ($key) {
+        $this->result[$key] = $value;
+      }  else {
+        $this->result[] = $value; end ($this->result); $key = key ($this->result);
+      }
+      $this->path[$incoming_indent] = $key;
+      return;
+    }
+
 
     $tempPath = Spyc::flatten ($this->path);
     // Unfolding inner array tree.
@@ -707,10 +716,9 @@ class Spyc {
     else {
       if (!is_array ($_arr)) { $_arr = array ($value); $key = 0; }
       else { $_arr[] = $value; end ($_arr); $key = key ($_arr); }
-
     }
 
-    $this->path[$indent] = $key;
+    $this->path[$incoming_indent] = $key;
 
     
     eval ('$this->result' . $tempPath . ' = $_arr;');
