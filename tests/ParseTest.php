@@ -8,7 +8,7 @@ class ParseTest extends PHPUnit_Framework_TestCase {
     protected $yaml;
 
     protected function setUp() {
-      $this->yaml = Spyc::YAMLLoad('../spyc.yaml');
+      $this->yaml = spyc_load_file('../spyc.yaml');
     }
 
     public function testNumericKey() {

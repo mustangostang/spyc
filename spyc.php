@@ -21,6 +21,17 @@ if (!function_exists('spyc_load')) {
   }
 }
 
+if (!function_exists('spyc_load_file')) {
+  /**
+   * Parses YAML to array.
+   * @param string $file Path to YAML file.
+   * @return array
+   */
+  function spyc_load_file ($file) {
+    return Spyc::YAMLLoad($file);
+  }
+}
+
 /**
    * The Simple PHP YAML Class.
    *
@@ -30,12 +41,16 @@ if (!function_exists('spyc_load')) {
    *
    * Usage:
    * <code>
-   *   $parser = new Spyc;
-   *   $array  = $parser->load($file);
+   *   $Spyc  = new Spyc;
+   *   $array = $Spyc->load($file);
    * </code>
    * or:
    * <code>
-   *   Spyc::YAMLLoad($file);
+   *   $array = Spyc::YAMLLoad($file);
+   * </code>
+   * or:
+   * <code>
+   *   $array = spyc_load_file($file);
    * </code>
    * @package Spyc
    */
@@ -64,13 +79,6 @@ class Spyc {
   * @access private
   * @var mixed
   */
-  private $_haveRefs;
-  private $_allNodes;
-  private $_allParent;
-  private $_lastIndent;
-  private $_lastNode;
-  private $_inBlock;
-  private $_isInline;
   private $_dumpIndent;
   private $_dumpWordWrap;
   private $_containsGroupAnchor = false;
@@ -92,6 +100,24 @@ class Spyc {
   */
   public $_nodeId;
 
+/**
+ * Load a valid YAML string to Spyc.
+ * @param string $input
+ * @return array
+ */
+  public function load ($input) {
+    return $this->__loadString($input);
+  }
+
+ /**
+ * Load a valid YAML file to Spyc.
+ * @param string $file
+ * @return array
+ */
+  public function loadFile ($file) {
+    return $this->__load($file);
+  }
+
   /**
      * Load YAML into a PHP array statically
      *
@@ -109,7 +135,7 @@ class Spyc {
      */
   public static function YAMLLoad($input) {
     $Spyc = new Spyc;
-    return $Spyc->load($input);
+    return $Spyc->__load($input);
   }
 
   /**
@@ -133,7 +159,7 @@ class Spyc {
      */
   public static function YAMLLoadString($input) {
     $Spyc = new Spyc;
-    return $Spyc->loadString($input);
+    return $Spyc->__loadString($input);
   }
 
   /**
@@ -338,12 +364,12 @@ class Spyc {
 
 // LOADING FUNCTIONS
 
-  private function load($input) {
+  private function __load($input) {
     $Source = $this->loadFromSource($input);
     return $this->loadWithSource($Source);
   }
 
-  private function loadString($input) {
+  private function __loadString($input) {
     $Source = $this->loadFromString($input);
     return $this->loadWithSource($Source);
   }
