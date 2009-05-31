@@ -7,7 +7,7 @@
 #
 --- %YAML:1.1
 title: Spyc -- a Simple PHP YAML Class
-version: 0.4.1
+version: 0.4.2
 author: [chris wanstrath, chris@ozmm.org]
 websites: [http://www.yaml.org, http://spyc.sourceforge.net]
 license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
@@ -149,8 +149,6 @@ resources:
   - http://yaml.kwiki.org/?YamlInFiveMinutes
   - http://www.whytheluckystiff.net/syck/
   - http://yaml4r.sourceforge.net/cookbook/
-  - http://www.sourceforge.net/projects/spyc/
-  - http://spyc.sourceforge.net/
 
 thanks:
   - Adam Wood
