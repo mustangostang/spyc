@@ -203,9 +203,12 @@ class Spyc {
     $string = "---\n";
 
     // Start at the base of the array and move through it.
+    $previous_key = -1;
     foreach ($array as $key => $value) {
-      $string .= $this->_yamlize($key,$value,0);
+      $string .= $this->_yamlize($key,$value,0,$previous_key);
+      $previous_key = $key;
     }
+
     return $string;
   }
 
