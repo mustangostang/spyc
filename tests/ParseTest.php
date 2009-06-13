@@ -20,6 +20,18 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals ($Expected, $Actual['steps']);
     }
 
+    public function testDeathMasks() {
+      $Expected = array ('sad' => 2, 'magnificent' => 4);
+      $Actual = spyc_load_file ('indent_1.yaml');
+      $this->assertEquals ($Expected, $Actual['death masks are']);
+    }
+
+    public function testDevDb() {
+      $Expected = array ('adapter' => 'mysql', 'host' => 'localhost', 'database' => 'rails_dev');
+      $Actual = spyc_load_file ('indent_1.yaml');
+      $this->assertEquals ($Expected, $Actual['development']);
+    }
+
     public function testNumericKey() {
       $this->assertEquals ("Ooo, a numeric key!", $this->yaml[1040]);
     }

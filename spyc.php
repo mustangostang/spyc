@@ -742,8 +742,7 @@ class Spyc {
 
     // Adding string or numeric key to the innermost level or $this->arr.
     if (is_string($key) && $key == '<<') {
-      $key = key ($value); $value = $value[$key];
-      $_arr = $value;
+      $_arr = array_merge ($_arr, $value);
     } else if ($key) {
       $_arr[$key] = $value;
     } else {
@@ -764,9 +763,14 @@ class Spyc {
 
     if ($this->_containsGroupAnchor) {
       $this->SavedGroups[$this->_containsGroupAnchor] = $this->path;
+      if (is_array ($value)) {
+        $k = key ($value);
+        if (!is_int ($k)) {
+          $this->SavedGroups[$this->_containsGroupAnchor][$incoming_indent + 2] = $k;
+        }
+      }
       $this->_containsGroupAnchor = false;
     }
-
 
   }
 
