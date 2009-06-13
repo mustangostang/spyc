@@ -3,20 +3,31 @@
 require_once ("../spyc.php");
 
 class DumpTest extends PHPUnit_Framework_TestCase {
+
+    private $files_to_test = array();
+
+    public function setUp() {
+      $this->files_to_test = array ('../spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
+    }
+
     public function testDump() {
-      $yaml = spyc_load(file_get_contents('../spyc.yaml'));
-      $dump = Spyc::YAMLDump ($yaml);
-      $yaml_after_dump = Spyc::YAMLLoad ($dump);
-      $this->assertEquals ($yaml, $yaml_after_dump);
+      foreach ($this->files_to_test as $file) {
+        $yaml = spyc_load(file_get_contents($file));
+        $dump = Spyc::YAMLDump ($yaml);
+        $yaml_after_dump = Spyc::YAMLLoad ($dump);
+        $this->assertEquals ($yaml, $yaml_after_dump);
+      }
     }
 
     public function testDumpWithQuotes() {
       $Spyc = new Spyc();
       $Spyc->setting_dump_force_quotes = true;
-      $yaml = $Spyc->load(file_get_contents('../spyc.yaml'));
-      $dump = $Spyc->dump ($yaml);
-      $yaml_after_dump = Spyc::YAMLLoad ($dump);
-      $this->assertEquals ($yaml, $yaml_after_dump);
+      foreach ($this->files_to_test as $file) {
+        $yaml = $Spyc->load(file_get_contents($file));
+        $dump = $Spyc->dump ($yaml);
+        $yaml_after_dump = Spyc::YAMLLoad ($dump);
+        $this->assertEquals ($yaml, $yaml_after_dump);
+      }
     }
 
     public function testDumpArrays() {

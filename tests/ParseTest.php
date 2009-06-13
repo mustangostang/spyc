@@ -11,6 +11,15 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->yaml = spyc_load_file('../spyc.yaml');
     }
 
+    public function testMergeHashKeys() {
+      $Expected =  array (
+        array ('step' => array('instrument' => 'Lasik 2000', 'pulseEnergy' => 5.4, 'pulseDuration' => 12, 'repetition' => 1000, 'spotSize' => '1mm')),
+        array ('step' => array('instrument' => 'Lasik 2000', 'pulseEnergy' => 5.4, 'pulseDuration' => 12, 'repetition' => 1000, 'spotSize' => '2mm')),
+      );
+      $Actual = spyc_load_file ('indent_1.yaml');
+      $this->assertEquals ($Expected, $Actual['steps']);
+    }
+
     public function testNumericKey() {
       $this->assertEquals ("Ooo, a numeric key!", $this->yaml[1040]);
     }

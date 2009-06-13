@@ -741,9 +741,12 @@ class Spyc {
 
 
     // Adding string or numeric key to the innermost level or $this->arr.
-    if ($key)
+    if (is_string($key) && $key == '<<') {
+      $key = key ($value); $value = $value[$key];
+      $_arr = $value;
+    } else if ($key) {
       $_arr[$key] = $value;
-    else {
+    } else {
       if (!is_array ($_arr)) { $_arr = array ($value); $key = 0; }
       else { $_arr[] = $value; end ($_arr); $key = key ($_arr); }
     }
