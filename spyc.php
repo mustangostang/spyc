@@ -295,9 +295,9 @@ class Spyc {
      */
   private function _dumpNode($key, $value, $indent, $previous_key = -1) {
     // do some folding here, for blocks
-    if (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false || 
+    if (is_string ($value) && (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
       strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
-      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) {
+      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false)) {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
       $value  = $this->_doFolding($value,$indent);
@@ -348,7 +348,7 @@ class Spyc {
   private function _doFolding($value,$indent) {
     // Don't do anything if wordwrap is set to 0
 
-    if ($this->_dumpWordWrap !== 0 && strlen($value) > $this->_dumpWordWrap) {
+    if ($this->_dumpWordWrap !== 0 && is_string ($value) && strlen($value) > $this->_dumpWordWrap) {
       $indent += $this->_dumpIndent;
       $indent = str_repeat(' ',$indent);
       $wrapped = wordwrap($value,$this->_dumpWordWrap,"\n$indent");
@@ -970,7 +970,18 @@ class Spyc {
     $line = trim(str_replace($group, '', $line));
     return $line;
   }
-
-
 }
-?>
+
+// Enable use of Spyc from command line
+// The syntax is the following: php spyc.php spyc.yaml
+
+define ('SPYC_FROM_COMMAND_LINE', false);
+
+do {
+  if (!SPYC_FROM_COMMAND_LINE) break;
+  if (empty ($_SERVER['argc']) || $_SERVER['argc'] < 2) break;
+  if (empty ($_SERVER['PHP_SELF']) || $_SERVER['PHP_SELF'] != 'spyc.php') break;
+  $file = $argv[1];
+  printf ("Spyc loading file: %s\n", $file);
+  print_r (spyc_load_file ($file));
+} while (0);

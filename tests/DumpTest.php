@@ -1,7 +1,6 @@
 <?php
 
 require_once ("../spyc.php");
-echo Spyc::YAMLDump(array("foo" => array()));
 
 class DumpTest extends PHPUnit_Framework_TestCase {
 
