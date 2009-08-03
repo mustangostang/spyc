@@ -383,7 +383,7 @@ class Spyc {
   private function loadWithSource($Source) {
     if (empty ($Source)) return array();
     if ($this->setting_use_syck_is_possible && function_exists ('syck_load')) {
-      $array = syck_load ($Source);
+      $array = syck_load (implode ('', $Source));
       return is_array($array) ? $array : array();
     }
 
