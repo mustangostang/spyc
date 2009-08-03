@@ -1,10 +1,10 @@
 <?php
 /**
    * Spyc -- A Simple PHP YAML Class
-   * @version 0.4.1
+   * @version 0.4.2
+   * @author Vlad Andersen <vlad.andersen@gmail.com>
    * @author Chris Wanstrath <chris@ozmm.org>
-   * @author Vlad Andersen <vlad@oneiros.ru>
-   * @link http://spyc.sourceforge.net/
+   * @link http://code.google.com/p/spyc/
    * @copyright Copyright 2005-2006 Chris Wanstrath, 2006-2009 Vlad Andersen
    * @license http://www.opensource.org/licenses/mit-license.php MIT License
    * @package Spyc
@@ -297,7 +297,7 @@ class Spyc {
     // do some folding here, for blocks
     if (is_string ($value) && (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
       strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
-      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false)) {
+      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) || substr ($value, -1, 1) == ':') {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
       $value  = $this->_doFolding($value,$indent);

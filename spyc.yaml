@@ -151,6 +151,8 @@ empty_key:
   :
     key: value
 
+trailing_colon: "foo:"
+
 multiline_items:
   - type: SomeItem
     values: [blah, blah, blah,
