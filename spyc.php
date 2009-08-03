@@ -426,6 +426,11 @@ class Spyc {
 
 
 
+      if (strpos ($line, '#')) {
+        if (strpos ($line, '"') === false && strpos ($line, "'") === false)
+          $line = preg_replace('/\s+#(.+)$/','',$line);
+      }
+
       $lineArray = $this->_parseLine($line);
 
       if ($literalBlockStyle)
@@ -466,6 +471,7 @@ class Spyc {
   private function _parseLine($line) {
     if (!$line) return array();
     $line = trim($line);
+
     if (!$line) return array();
     $array = array();
 
@@ -701,6 +707,18 @@ class Spyc {
     return false;
   }
 
+  private function referenceContentsByAlias ($alias) {
+    do {
+      if (!isset($this->SavedGroups[$alias])) { echo "Bad group name: $alias."; break; }
+      $groupPath = $this->SavedGroups[$alias];
+      $value = $this->result;
+      foreach ($groupPath as $k) {
+        $value = $value[$k];
+      }
+    } while (false);
+    return $value;
+  }
+
   private function addArrayInline ($array, $indent) {
       $CommonGroupPath = $this->path;
       if (empty ($array)) return false;
@@ -711,7 +729,7 @@ class Spyc {
       }
       return true;
   }
-  
+
   private function addArray ($incoming_data, $incoming_indent) {
 
     if (count ($incoming_data) > 1)
@@ -740,14 +758,7 @@ class Spyc {
     }
 
     if ($this->_containsGroupAlias) {
-      do {
-        if (!isset($this->SavedGroups[$this->_containsGroupAlias])) { echo "Bad group name: $this->_containsGroupAlias."; break; }
-        $groupPath = $this->SavedGroups[$this->_containsGroupAlias];
-        $value = $this->result;
-        foreach ($groupPath as $k) {
-          $value = $value[$k];
-        }
-      } while (false);
+      $value = $this->referenceContentsByAlias($this->_containsGroupAlias);
       $this->_containsGroupAlias = false;
     }
 
@@ -755,6 +766,7 @@ class Spyc {
     // Adding string or numeric key to the innermost level or $this->arr.
     if (is_string($key) && $key == '<<') {
       if (!is_array ($_arr)) { $_arr = array (); }
+
       $_arr = array_merge ($_arr, $value);
     } else if ($key || $key === '') {
       $_arr[$key] = $value;
@@ -968,8 +980,9 @@ class Spyc {
     if (strpos($line, '&') === false && strpos($line, '*') === false) return false; // Please die fast ;-)
     if ($line[0] == '&' && preg_match('/^(&['.$symbolsForReference.']+)/', $line, $matches)) return $matches[1];
     if ($line[0] == '*' && preg_match('/^(\*['.$symbolsForReference.']+)/', $line, $matches)) return $matches[1];
-    if (preg_match('/(&['.$symbolsForReference.']+$)/', $line, $matches)) return $matches[1];
+    if (preg_match('/(&['.$symbolsForReference.']+)$/', $line, $matches)) return $matches[1];
     if (preg_match('/(\*['.$symbolsForReference.']+$)/', $line, $matches)) return $matches[1];
+    if (preg_match ('#^\s*<<\s*:\s*(\*[^\s]+).*$#', $line, $matches)) return $matches[1];
     return false;
 
   }
