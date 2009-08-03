@@ -243,6 +243,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertSame (array('' => array ('key' => 'value')), $this->yaml['empty_key']);
     }
 
+    public function testMultilines() {
+      $this->assertSame (array(array('type' => 'SomeItem', 'values' => array ('blah', 'blah', 'blah', 'blah'), 'ints' => array(2, 54, 12, 2143))), $this->yaml['multiline_items']);
+    }
+
     public function testSpecialCharacters() {
       $this->assertSame ('[{]]{{]]', $this->yaml['special_characters']);
     }

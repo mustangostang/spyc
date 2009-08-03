@@ -792,7 +792,9 @@ class Spyc {
   private static function greedilyNeedNextLine($line) {
     $line = trim ($line);
     if (!strlen($line)) return false;
-    if ($line[0] == '[' && substr ($line, -1, 1) != ']') return true;
+    if (substr ($line, -1, 1) == ']') return false;
+    if ($line[0] == '[') return true;
+    if (preg_match ('#^[^:]+?:\s*\[#', $line)) return true;
     return false;
   }
 

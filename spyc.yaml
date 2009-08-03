@@ -151,6 +151,14 @@ empty_key:
   :
     key: value
 
+multiline_items:
+  - type: SomeItem
+    values: [blah, blah, blah,
+      blah]
+    ints: [2, 54, 12,
+      2143]
+
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?
