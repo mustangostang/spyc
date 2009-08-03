@@ -36,6 +36,12 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals ($awaiting, $dump);
     }
 
+    public function testDumpNumerics() {
+      $dump = Spyc::YAMLDump(array ('404', '405', '500'));
+      $awaiting = "---\n- 404\n- 405\n- 500\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
     public function testDumpAsterisks() {
       $dump = Spyc::YAMLDump(array ('*'));
       $awaiting = "---\n- '*'\n";
