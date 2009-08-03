@@ -145,6 +145,8 @@ empty_hash: { }
 
 special_characters: "[{]]{{]]"
 
+asterisks: "*"
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?

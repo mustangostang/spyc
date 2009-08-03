@@ -296,7 +296,7 @@ class Spyc {
   private function _dumpNode($key, $value, $indent, $previous_key = -1) {
     // do some folding here, for blocks
     if (is_string ($value) && (strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
-      strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
+      strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
       strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false)) {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
@@ -329,6 +329,12 @@ class Spyc {
      * @param $indent int The value of the indent
      */
   private function _doLiteralBlock($value,$indent) {
+    if (strpos($value, "\n") === false && strpos($value, "'") === false) {
+      return sprintf ("'%s'", $value);
+    }
+    if (strpos($value, "\n") === false && strpos($value, '"') === false) {
+      return sprintf ('"%s"', $value);
+    }
     $exploded = explode("\n",$value);
     $newValue = '|';
     $indent  += $this->_dumpIndent;

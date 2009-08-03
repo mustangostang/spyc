@@ -36,6 +36,13 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals ($awaiting, $dump);
     }
 
+    public function testDumpAsterisks() {
+      $dump = Spyc::YAMLDump(array ('*'));
+      $awaiting = "---\n- '*'\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+
     public function testEmpty() {
       $dump = Spyc::YAMLDump(array("foo" => array()));
       $awaiting = "---\nfoo: [ ]\n";
