@@ -160,6 +160,23 @@ multiline_items:
     ints: [2, 54, 12,
       2143]
 
+many_lines: |
+  A quick
+  fox
+
+
+  jumped
+  over
+
+
+
+
+
+  a lazy
+
+
+
+  dog
 
 # [Endloop]
 endloop: |

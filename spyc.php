@@ -801,17 +801,16 @@ class Spyc {
   private function addLiteralLine ($literalBlock, $line, $literalBlockStyle) {
     $line = self::stripIndent($line);
     $line = rtrim ($line, "\r\n\t ") . "\n";
-    if ($line == "\n") $line = '';
-
     if ($literalBlockStyle == '|') {
       return $literalBlock . $line;
     }
     if (strlen($line) == 0)
       return rtrim($literalBlock, ' ') . "\n";
-
+    if ($line == "\n" && $literalBlockStyle == '>') {
+      return rtrim ($literalBlock, " \t") . "\n";
+    }
     if ($line != "\n")
       $line = trim ($line, "\r\n ") . " ";
-
     return $literalBlock . $line;
   }
 

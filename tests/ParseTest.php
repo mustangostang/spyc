@@ -247,6 +247,25 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertSame (array(array('type' => 'SomeItem', 'values' => array ('blah', 'blah', 'blah', 'blah'), 'ints' => array(2, 54, 12, 2143))), $this->yaml['multiline_items']);
     }
 
+    public function testManyNewlines() {
+      $this->assertSame ('A quick
+fox
+
+
+jumped
+over
+
+
+
+
+
+a lazy
+
+
+
+dog', $this->yaml['many_lines']);
+    }
+
     public function testSpecialCharacters() {
       $this->assertSame ('[{]]{{]]', $this->yaml['special_characters']);
     }
