@@ -706,7 +706,7 @@ class Spyc {
       return $this->addArrayInline ($incoming_data, $incoming_indent);
     
     $key = key ($incoming_data);
-    $value = $incoming_data[$key];
+    $value = isset($incoming_data[$key]) ? $incoming_data[$key] : null;
 
     if ($incoming_indent == 0 && !$this->_containsGroupAlias && !$this->_containsGroupAnchor) { // Shortcut for root-level values.
       if ($key) {
