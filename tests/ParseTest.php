@@ -239,6 +239,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertSame (array(), $this->yaml['empty_hash']);
     }
 
+    public function testEmptykey() {
+      $this->assertSame (array('' => array ('key' => 'value')), $this->yaml['empty_key']);
+    }
+
     public function testSpecialCharacters() {
       $this->assertSame ('[{]]{{]]', $this->yaml['special_characters']);
     }

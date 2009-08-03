@@ -147,6 +147,10 @@ special_characters: "[{]]{{]]"
 
 asterisks: "*"
 
+empty_key:
+  :
+    key: value
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?

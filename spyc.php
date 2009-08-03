@@ -715,9 +715,9 @@ class Spyc {
     $value = isset($incoming_data[$key]) ? $incoming_data[$key] : null;
 
     if ($incoming_indent == 0 && !$this->_containsGroupAlias && !$this->_containsGroupAnchor) { // Shortcut for root-level values.
-      if ($key) {
+      if ($key || $key === '') {
         $this->result[$key] = $value;
-      }  else {
+      } else {
         $this->result[] = $value; end ($this->result); $key = key ($this->result);
       }
       $this->path[$incoming_indent] = $key;
@@ -749,7 +749,7 @@ class Spyc {
     // Adding string or numeric key to the innermost level or $this->arr.
     if (is_string($key) && $key == '<<') {
       $_arr = array_merge ($_arr, $value);
-    } else if ($key) {
+    } else if ($key || $key === '') {
       $_arr[$key] = $value;
     } else {
       if (!is_array ($_arr)) { $_arr = array ($value); $key = 0; }
