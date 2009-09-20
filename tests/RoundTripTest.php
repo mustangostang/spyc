@@ -30,5 +30,9 @@ class RoundTripTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals (array ('x' => "\n"), roundTrip ("\n"));
     }
 
+    public function testWordWrap() {
+      $this->assertEquals (array ('x' => "aaaaaaaaaaaaaaaaaaaaaaaaaaaa  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"), roundTrip ("aaaaaaaaaaaaaaaaaaaaaaaaaaaa  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"));
+    }
+
    
 }

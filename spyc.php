@@ -301,7 +301,7 @@ class Spyc {
   private function _dumpNode($key, $value, $indent, $previous_key = -1, $first_key = 0) {
     // do some folding here, for blocks
     if (is_string ($value) && ((strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
-      strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
+      strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false || strpos ($value, '  ') !== false ||
       strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) || substr ($value, -1, 1) == ':') 
     ) {
       $value = $this->_doLiteralBlock($value,$indent);
@@ -354,7 +354,7 @@ class Spyc {
     $indent  += $this->_dumpIndent;
     $spaces   = str_repeat(' ',$indent);
     foreach ($exploded as $line) {
-      $newValue .= "\n" . $spaces . trim($line);
+      $newValue .= "\n" . $spaces . ($line);
     }
     return $newValue;
   }
