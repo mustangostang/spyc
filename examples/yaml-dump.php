@@ -3,12 +3,6 @@
 #
 #    S P Y C
 #      a simple php yaml class
-#   v0.2(.5)
-#
-# author: [chris wanstrath, chris@ozmm.org]
-# websites: [http://www.yaml.org, http://spyc.sourceforge.net/]
-# license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
-# copyright: (c) 2005-2006 Chris Wanstrath
 #
 # Feel free to dump an array to YAML, and then to load that YAML back into an
 # array.  This is a good way to test the limitations of the parser and maybe
@@ -29,9 +23,3 @@ $array['Old Dog'] = "And if you want\n to preserve line breaks, \ngo ahead!";
 $array['key:withcolon'] = "Should support this to";
 
 $yaml = Spyc::YAMLDump($array,4,60);
-
-echo '<pre>A PHP array run through YAMLDump():<br/>';
-print_r($yaml);
-echo '</pre>';
-
-?>
