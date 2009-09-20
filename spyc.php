@@ -311,8 +311,10 @@ class Spyc {
 
     if ($value === array()) $value = '[ ]';
     if (in_array ($value, array ('true', 'TRUE', 'false', 'FALSE', 'y', 'Y', 'n', 'N', 'null', 'NULL'), true)) {
-       $value = '"' . $value . '"';
+       $value = $this->_doLiteralBlock($value,$indent);
     }
+    if (trim ($value) != $value)
+       $value = $this->_doLiteralBlock($value,$indent);
 
     if (is_bool($value)) {
        $value = ($value) ? "true" : "false";
