@@ -48,3 +48,5 @@ login: &login
 development:
    database: rails_dev
    <<: *login
+
+"key": "value:"
