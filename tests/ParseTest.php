@@ -68,6 +68,11 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertSame (5.34, $this->yaml['Float']);
     }
 
+    public function testNewline() {
+      $this->assertSame ("\n", $this->yaml['NewLine']);
+    }
+
+
     public function testSeq0() {
       $this->assertEquals ("PHP Class", $this->yaml[0]);
     }

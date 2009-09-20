@@ -23,6 +23,7 @@ NotTrue: 'y'
 NotBoolTrue: 'true'
 NotInt: '5'
 Float: 5.34
+NewLine: \n
 
 # A sequence
 - PHP Class

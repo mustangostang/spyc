@@ -342,6 +342,7 @@ class Spyc {
      * @param $indent int The value of the indent
      */
   private function _doLiteralBlock($value,$indent) {
+    if ($value === "\n") return '\n';
     if (strpos($value, "\n") === false && strpos($value, "'") === false) {
       return sprintf ("'%s'", $value);
     }
@@ -478,8 +479,8 @@ class Spyc {
   private function _parseLine($line) {
     if (!$line) return array();
     $line = trim($line);
-
     if (!$line) return array();
+
     $array = array();
 
     $group = $this->nodeContainsGroup($line);
@@ -527,8 +528,10 @@ class Spyc {
     if ($is_quoted)
       return strtr(substr ($value, 1, -1), array ('\\"' => '"', '\'\'' => '\'', '\\\'' => '\''));
     
-    if (strpos($value, ' #') !== false)
+    if (strpos($value, ' #') !== false && !$is_quoted)
       $value = preg_replace('/\s+#(.+)$/','',$value);
+
+    if (!$is_quoted) $value = str_replace('\n', "\n", $value);
 
     if ($first_character == '[' && $last_character == ']') {
       // Take out strings sequences and mappings
