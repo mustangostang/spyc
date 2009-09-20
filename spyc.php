@@ -319,7 +319,7 @@ class Spyc {
       // It's a sequence
       $string = $spaces.'- '.$value."\n";
     } else {
-      if ($first_key===0)  throw new Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
+      // if ($first_key===0)  throw new Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
       // It's mapped
       if (strpos($key, ":") !== false) { $key = '"' . $key . '"'; }
       $string = $spaces.$key.': '.$value."\n";
@@ -908,13 +908,21 @@ class Spyc {
   }
 
 
+  private static function unquote ($value) {
+    if (!$value) return $value;
+    if (!is_string($value)) return $value;
+    if ($value[0] == '\'') return trim ($value, '\'');
+    if ($value[0] == '"') return trim ($value, '"');
+    return $value;
+  }
+
   private function startsMappedSequence ($line) {
     return ($line[0] == '-' && substr ($line, -1, 1) == ':');
   }
 
   private function returnMappedSequence ($line) {
     $array = array();
-    $key         = trim(substr($line,1,-1));
+    $key         = self::unquote(trim(substr($line,1,-1)));
     $array[$key] = array();
     $this->delayedPath = array(strpos ($line, $key) + $this->indent => $key);
     return array($array);
@@ -922,7 +930,7 @@ class Spyc {
 
   private function returnMappedValue ($line) {
     $array = array();
-    $key         = trim(substr($line,0,-1));
+    $key         = self::unquote (trim(substr($line,0,-1)));
     $array[$key] = '';
     return $array;
   }

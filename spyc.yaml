@@ -187,6 +187,10 @@ noindent_records:
 - record1: value1
 - record2: value2
 
+"a:1": [1000]
+"a:2":
+  - 2000
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?

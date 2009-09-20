@@ -278,6 +278,14 @@ dog', $this->yaml['many_lines']);
       , $this->yaml['noindent_records']);
     } */
 
+    public function testColonsInKeys() {
+      $this->assertSame (array (1000), $this->yaml['a:1']);
+    }
+
+    public function testColonsInKeys2() {
+      $this->assertSame (array (2000), $this->yaml['a:2']);
+    }
+
     public function testSpecialCharacters() {
       $this->assertSame ('[{]]{{]]', $this->yaml['special_characters']);
     }

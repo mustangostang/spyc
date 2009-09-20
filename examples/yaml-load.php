@@ -20,4 +20,6 @@ print_r($array);
 echo '</pre>';
 
 
-?>
+echo '<pre>YAML Data dumped back:<br/>';
+echo Spyc::YAMLDump($array);
+echo '</pre>';
