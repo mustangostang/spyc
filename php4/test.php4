@@ -81,7 +81,7 @@ if ($yaml[5] != array("program" => "Adium", "platform" => "OS X",
 	die('Sequence 5 failed');
 
 # A folded block as a mapped value
-if ($yaml['no time'] != "There isn't any time for your tricks! \nDo you understand?")
+if ($yaml['no time'] != "There isn't any time for your tricks!\nDo you understand?")
 	die("Key: 'no time' failed");
 
 # A literal block as a mapped value
