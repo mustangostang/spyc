@@ -266,6 +266,11 @@ a lazy
 dog', $this->yaml['many_lines']);
     }
 
+    public function testWerte() {
+      $this->assertSame (array ('1' => 'nummer 1', '0' => 'Stunde 0'), $this->yaml['werte']);
+    }
+
+
     public function testSpecialCharacters() {
       $this->assertSame ('[{]]{{]]', $this->yaml['special_characters']);
     }

@@ -732,14 +732,17 @@ class Spyc {
 
   private function addArray ($incoming_data, $incoming_indent) {
 
+   // print_r ($incoming_data);
+
     if (count ($incoming_data) > 1)
       return $this->addArrayInline ($incoming_data, $incoming_indent);
     
     $key = key ($incoming_data);
     $value = isset($incoming_data[$key]) ? $incoming_data[$key] : null;
+    if ($key === '__!YAMLZero') $key = '0';
 
     if ($incoming_indent == 0 && !$this->_containsGroupAlias && !$this->_containsGroupAnchor) { // Shortcut for root-level values.
-      if ($key || $key === '') {
+      if ($key || $key === '' || $key === '0') {
         $this->result[$key] = $value;
       } else {
         $this->result[] = $value; end ($this->result); $key = key ($this->result);
@@ -768,7 +771,7 @@ class Spyc {
       if (!is_array ($_arr)) { $_arr = array (); }
 
       $_arr = array_merge ($_arr, $value);
-    } else if ($key || $key === '') {
+    } else if ($key || $key === '' || $key === '0') {
       $_arr[$key] = $value;
     } else {
       if (!is_array ($_arr)) { $_arr = array ($value); $key = 0; }
@@ -938,6 +941,7 @@ class Spyc {
 
   private function returnKeyValuePair ($line) {
     $array = array();
+    $key = '';
     if (strpos ($line, ':')) {
       // It's a key/value pair most likely
       // If the key is in double quotes pull it out
@@ -953,13 +957,11 @@ class Spyc {
       }
       // Set the type of the value.  Int, string, etc
       $value = $this->_toType($value);
-      if (empty($key)) {
-        $array[]     = $value;
-      } else {
-        $array[$key] = $value;
-      }
+      if ($key === '0') $key = '__!YAMLZero';
+      $array[$key] = $value;
+    } else {
+      $array = array ($line);
     }
-
     return $array;
 
   }
