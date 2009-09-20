@@ -183,6 +183,10 @@ werte:
   1: nummer 1
   0: Stunde 0
 
+noindent_records:
+- record1: value1
+- record2: value2
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?

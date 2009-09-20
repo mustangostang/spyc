@@ -50,3 +50,4 @@ development:
    <<: *login
 
 "key": "value:"
+colon_only: ":"
