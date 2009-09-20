@@ -18,6 +18,10 @@ True: true
 False: false
 Zero: 0
 Null: NULL
+NotNull: 'null'
+NotTrue: 'y'
+NotBoolTrue: 'true'
+NotInt: '5'
 Float: 5.34
 
 # A sequence

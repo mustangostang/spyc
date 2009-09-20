@@ -302,16 +302,21 @@ class Spyc {
     // do some folding here, for blocks
     if (is_string ($value) && ((strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
       strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false ||
-      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) || substr ($value, -1, 1) == ':')) {
+      strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) || substr ($value, -1, 1) == ':') 
+    ) {
       $value = $this->_doLiteralBlock($value,$indent);
     } else {
       $value  = $this->_doFolding($value,$indent);
-      if (is_bool($value)) {
-        $value = ($value) ? "true" : "false";
-      }
     }
 
     if ($value === array()) $value = '[ ]';
+    if (in_array ($value, array ('true', 'TRUE', 'false', 'FALSE', 'y', 'Y', 'n', 'N', 'null', 'NULL'), true)) {
+       $value = '"' . $value . '"';
+    }
+
+    if (is_bool($value)) {
+       $value = ($value) ? "true" : "false";
+    }
 
     $spaces = str_repeat(' ',$indent);
 

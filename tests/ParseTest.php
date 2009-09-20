@@ -60,6 +60,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertSame (null, $this->yaml['Null']);
     }
 
+    public function testMappingsNotNull() {
+      $this->assertSame ('null', $this->yaml['NotNull']);
+    }
+
     public function testMappingsFloat() {
       $this->assertSame (5.34, $this->yaml['Float']);
     }
