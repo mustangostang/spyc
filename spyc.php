@@ -235,7 +235,7 @@ class Spyc {
       
       $previous_key = -1;
       foreach ($array as $key => $value) {
-        $string .= $this->_yamlize($key,$value,0,$previous_key, $first_key);
+        $string .= $this->_yamlize($key,$value,0,$previous_key, $first_key, $array);
         $previous_key = $key;
       }
     }
@@ -250,20 +250,20 @@ class Spyc {
      * @param $value The value of the item
      * @param $indent The indent of the current node
      */
-  private function _yamlize($key,$value,$indent, $previous_key = -1, $first_key = 0) {
+  private function _yamlize($key,$value,$indent, $previous_key = -1, $first_key = 0, $source_array = null) {
     if (is_array($value)) {
       if (empty ($value))
-        return $this->_dumpNode($key, array(), $indent, $previous_key, $first_key);
+        return $this->_dumpNode($key, array(), $indent, $previous_key, $first_key, $source_array);
       // It has children.  What to do?
       // Make it the right kind of item
-      $string = $this->_dumpNode($key, NULL, $indent, $previous_key, $first_key);
+      $string = $this->_dumpNode($key, NULL, $indent, $previous_key, $first_key, $source_array);
       // Add the indent
       $indent += $this->_dumpIndent;
       // Yamlize the array
       $string .= $this->_yamlizeArray($value,$indent);
     } elseif (!is_array($value)) {
       // It doesn't have children.  Yip.
-      $string = $this->_dumpNode($key, $value, $indent, $previous_key, $first_key);
+      $string = $this->_dumpNode($key, $value, $indent, $previous_key, $first_key, $source_array);
     }
     return $string;
   }
@@ -280,8 +280,9 @@ class Spyc {
       $string = '';
       $previous_key = -1;
       $first_key = key($array);
+
       foreach ($array as $key => $value) {
-        $string .= $this->_yamlize($key, $value, $indent, $previous_key, $first_key);
+        $string .= $this->_yamlize($key, $value, $indent, $previous_key, $first_key, $array);
         $previous_key = $key;
       }
       return $string;
@@ -298,7 +299,7 @@ class Spyc {
      * @param $value The value of the item
      * @param $indent The indent of the current node
      */
-  private function _dumpNode($key, $value, $indent, $previous_key = -1, $first_key = 0) {
+  private function _dumpNode($key, $value, $indent, $previous_key = -1, $first_key = 0, $source_array = null) {
     // do some folding here, for blocks
     if (is_string ($value) && ((strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
       strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false || strpos ($value, '  ') !== false ||
@@ -322,14 +323,15 @@ class Spyc {
 
     $spaces = str_repeat(' ',$indent);
 
-    if (is_int($key) && $key - 1 == $previous_key && $first_key===0) {
+    //if (is_int($key) && $key - 1 == $previous_key && $first_key===0) {
+    if (is_array ($source_array) && array_keys($source_array) === range(0, count($source_array) - 1)) {
       // It's a sequence
       $string = $spaces.'- '.$value."\n";
     } else {
-      if ($first_key===0)  throw new Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
+      // if ($first_key===0)  throw new Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
       // It's mapped
       if (strpos($key, ":") !== false || strpos($key, "#") !== false) { $key = '"' . $key . '"'; }
-      $string = $spaces.$key.': '.$value."\n";
+      $string = rtrim ($spaces.$key.': '.$value)."\n";
     }
     return $string;
   }

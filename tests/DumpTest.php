@@ -49,6 +49,12 @@ class DumpTest extends PHPUnit_Framework_TestCase {
     }
 
 
+    public function testDumpNumericHashes() {
+      $dump = Spyc::YAMLDump(array ("titel"=> array("0" => "", 1 => "Dr.", 5 => "Prof.", 6 => "Prof. Dr.")));
+      $awaiting = "---\ntitel:\n  0:\n  1: Dr.\n  5: Prof.\n  6: Prof. Dr.\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
     public function testEmpty() {
       $dump = Spyc::YAMLDump(array("foo" => array()));
       $awaiting = "---\nfoo: [ ]\n";
