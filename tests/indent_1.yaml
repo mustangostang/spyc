@@ -51,3 +51,5 @@ development:
 
 "key": "value:"
 colon_only: ":"
+
+list_and_comment: [one, two, three] # comment
