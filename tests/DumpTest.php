@@ -55,4 +55,10 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals ($awaiting, $dump);
     }
 
+    public function testHashesInKeys() {
+      $dump = Spyc::YAMLDump(array ('#color' => '#ffffff'));
+      $awaiting = "---\n\"#color\": '#ffffff'\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
 }

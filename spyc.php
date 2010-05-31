@@ -328,7 +328,7 @@ class Spyc {
     } else {
       if ($first_key===0)  throw new Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
       // It's mapped
-      if (strpos($key, ":") !== false) { $key = '"' . $key . '"'; }
+      if (strpos($key, ":") !== false || strpos($key, "#") !== false) { $key = '"' . $key . '"'; }
       $string = $spaces.$key.': '.$value."\n";
     }
     return $string;
