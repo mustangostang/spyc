@@ -230,11 +230,10 @@ class Spyc {
 
     // Start at the base of the array and move through it.
     if ($array) {
-      $array = (array)$array;
-      $first_key = key($array);
-      
+      $array = (array)$array; 
       $previous_key = -1;
       foreach ($array as $key => $value) {
+        if (!isset($first_key)) $first_key = $key;
         $string .= $this->_yamlize($key,$value,0,$previous_key, $first_key, $array);
         $previous_key = $key;
       }
@@ -279,9 +278,8 @@ class Spyc {
     if (is_array($array)) {
       $string = '';
       $previous_key = -1;
-      $first_key = key($array);
-
       foreach ($array as $key => $value) {
+        if (!isset($first_key)) $first_key = $key;
         $string .= $this->_yamlize($key, $value, $indent, $previous_key, $first_key, $array);
         $previous_key = $key;
       }
