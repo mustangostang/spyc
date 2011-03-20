@@ -8,6 +8,7 @@ function php5to4 ($src, $dest) {
   $code = preg_replace ('#(public|private|protected)\s+static\s+\$#i', 'var \$', $code);
   $code = preg_replace ('#(public|private|protected)\s+function#i', 'function', $code);
   $code = preg_replace ('#(public|private|protected)\s+static\s+function#i', 'function', $code);
+  $code = preg_replace ('#throw new Exception\\(([^)]*)\\)#i', 'trigger_error($1,E_USER_ERROR)', $code);
   $code = str_replace ('self::', '$this->', $code);
   $f = fopen ($dest, 'w');
   fwrite($f, $code);
