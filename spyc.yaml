@@ -23,6 +23,7 @@ NotTrue: 'y'
 NotBoolTrue: 'true'
 NotInt: '5'
 Float: 5.34
+SmallFloat: 0.7
 NewLine: \n
 
 # A sequence

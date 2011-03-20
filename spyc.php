@@ -598,7 +598,7 @@ class Spyc {
 
     if (is_numeric($value)) {
       if ($value === '0') return 0;
-      if (trim ($value, 0) === $value)
+      if (rtrim ($value, 0) === $value)
         $value = (float)$value;
       return $value;
     }

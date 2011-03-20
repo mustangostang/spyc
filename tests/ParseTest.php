@@ -68,6 +68,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
       $this->assertSame (5.34, $this->yaml['Float']);
     }
 
+    public function testMappingsSmallFloat() {
+      $this->assertSame (0.7, $this->yaml['SmallFloat']);
+    }
+
     public function testNewline() {
       $this->assertSame ("\n", $this->yaml['NewLine']);
     }
