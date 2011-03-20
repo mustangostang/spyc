@@ -67,6 +67,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
     public function testMappingsFloat() {
       $this->assertSame (5.34, $this->yaml['Float']);
     }
+    
+    public function testMappingsNegative() {
+      $this->assertSame (-90, $this->yaml['Negative']);
+    }
 
     public function testMappingsSmallFloat() {
       $this->assertSame (0.7, $this->yaml['SmallFloat']);
