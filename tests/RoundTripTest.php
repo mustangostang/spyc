@@ -29,6 +29,10 @@ class RoundTripTest extends PHPUnit_Framework_TestCase {
     public function testSpaces() {
       $this->assertEquals (array ('x' => 'x '), roundTrip ('x '));
     }
+    
+    public function testApostrophes() {
+      $this->assertEquals (array ('x' => "'biz'"), roundTrip ("'biz'"));
+    }
 
     public function testNewLines() {
       $this->assertEquals (array ('x' => "\n"), roundTrip ("\n"));
