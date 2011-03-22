@@ -17,6 +17,10 @@ class RoundTripTest extends PHPUnit_Framework_TestCase {
     public function testY() {
       $this->assertEquals (array ('x' => 'y'), roundTrip ('y'));
     }
+    
+    public function testExclam() {
+      $this->assertEquals (array ('x' => '!yeah'), roundTrip ('!yeah'));
+    }
 
     public function test5() {
       $this->assertEquals (array ('x' => '5'), roundTrip ('5'));
