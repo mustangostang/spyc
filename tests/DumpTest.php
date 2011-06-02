@@ -41,6 +41,28 @@ class DumpTest extends PHPUnit_Framework_TestCase {
         $awaiting = "---\na: 1\nb: null\nc: 3\n";
         $this->assertEquals ($awaiting, $dump);
     }
+    
+    public function testDumpingMixedArrays() {
+        $array = array();
+        $array[] = 'Sequence item';
+        $array['The Key'] = 'Mapped value';
+        $array[] = array('A sequence','of a sequence');
+        $array[] = array('first' => 'A sequence','second' => 'of mapped values');
+        $array['Mapped'] = array('A sequence','which is mapped');
+        $array['A Note'] = 'What if your text is too long?';
+        $array['Another Note'] = 'If that is the case, the dumper will probably fold your text by using a block.  Kinda like this.';
+        $array['The trick?'] = 'The trick is that we overrode the default indent, 2, to 4 and the default wordwrap, 40, to 60.';
+        $array['Old Dog'] = "And if you want\n to preserve line breaks, \ngo ahead!";
+        $array['key:withcolon'] = "Should support this to";
+
+        $yaml = Spyc::YAMLDump($array,4,60);        
+    }
+    
+    public function testMixed() {
+        $dump = Spyc::YAMLDump(array(0 => 1, 'b' => 2, 1 => 3));
+        $awaiting = "---\n0: 1\nb: 2\n1: 3\n";
+        $this->assertEquals ($awaiting, $dump);
+    }    
 
     public function testDumpNumerics() {
       $dump = Spyc::YAMLDump(array ('404', '405', '500'));
