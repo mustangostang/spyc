@@ -42,6 +42,15 @@ class DumpTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals ($awaiting, $dump);
     }
     
+    public function testNext() {
+        $array = array("aaa", "bbb", "ccc");
+        #set arrays internal pointer to next element
+        next($array);
+        $dump = Spyc::YAMLDump($array);        
+        $awaiting = "---\n- aaa\n- bbb\n- ccc\n";
+        $this->assertEquals ($awaiting, $dump);        
+    }
+    
     public function testDumpingMixedArrays() {
         $array = array();
         $array[] = 'Sequence item';
