@@ -26,6 +26,10 @@ nested_hashes_and_seqs:
 
 easier_nest: { h: [{a: b, a1: b1}, {c: d}] }
 
+one_space: |
+    By four
+      spaces
+
 steps:
   - step: &id001
       instrument:      Lasik 2000

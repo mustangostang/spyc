@@ -426,9 +426,9 @@ class Spyc {
         $line = rtrim ($line, $literalBlockStyle . " \n");
         $literalBlock = '';
         $line .= $this->LiteralPlaceHolder;
-
+        $literal_block_indent = strlen($Source[$i+1]) - strlen(ltrim($Source[$i+1]));
         while (++$i < $cnt && $this->literalBlockContinues($Source[$i], $this->indent)) {
-          $literalBlock = $this->addLiteralLine($literalBlock, $Source[$i], $literalBlockStyle);
+          $literalBlock = $this->addLiteralLine($literalBlock, $Source[$i], $literalBlockStyle, $literal_block_indent);
         }
         $i--;
       }
@@ -839,8 +839,11 @@ class Spyc {
     return false;
   }
 
-  private function addLiteralLine ($literalBlock, $line, $literalBlockStyle) {
-    $line = self::stripIndent($line);
+  private function addLiteralLine ($literalBlock, $line, $literalBlockStyle, $indent = -1) {
+    $line = self::stripIndent($line, $indent);
+    if ($literalBlockStyle !== '|') {
+        $line = self::stripIndent($line);
+    }
     $line = rtrim ($line, "\r\n\t ") . "\n";
     if ($literalBlockStyle == '|') {
       return $literalBlock . $line;

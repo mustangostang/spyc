@@ -54,6 +54,10 @@ class IndentTest extends PHPUnit_Framework_TestCase {
       ), $this->Y['easier_nest']);
     }
 
+    public function testIndent_space() {
+      $this->assertEquals ("By four\n  spaces", $this->Y['one_space']);
+    }
+
     public function testListAndComment() {
       $this->assertEquals (array ('one', 'two', 'three'), $this->Y['list_and_comment']);
     }
