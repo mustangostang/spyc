@@ -58,6 +58,8 @@ class Spyc {
 
   // SETTINGS
 
+  const REMPTY = "\0\0\0\0\0";
+
   /**
    * Setting this to true will force YAMLDump to enclose any string value in
    * quotes.  False by default.
@@ -255,7 +257,7 @@ class Spyc {
         return $this->_dumpNode($key, array(), $indent, $previous_key, $first_key, $source_array);
       // It has children.  What to do?
       // Make it the right kind of item
-      $string = $this->_dumpNode($key, NULL, $indent, $previous_key, $first_key, $source_array);
+      $string = $this->_dumpNode($key, self::REMPTY, $indent, $previous_key, $first_key, $source_array);
       // Add the indent
       $indent += $this->_dumpIndent;
       // Yamlize the array
@@ -319,6 +321,9 @@ class Spyc {
     if (is_bool($value)) {
        $value = ($value) ? "true" : "false";
     }
+    
+    if ($value === null) $value = 'null';
+    if ($value === "'" . self::REMPTY . "'") $value = null;
 
     $spaces = str_repeat(' ',$indent);
 
@@ -375,7 +380,7 @@ class Spyc {
       $wrapped = wordwrap($value,$this->_dumpWordWrap,"\n$indent");
       $value   = ">\n".$indent.$wrapped;
     } else {
-      if ($this->setting_dump_force_quotes && is_string ($value))
+      if ($this->setting_dump_force_quotes && is_string ($value) && $value !== self::REMPTY)
         $value = '"' . $value . '"';
     }
 
