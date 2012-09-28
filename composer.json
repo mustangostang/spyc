@@ -11,7 +11,7 @@
     "homepage": "https://github.com/lespoius/spyc/",
     "authors" : [{
         "name": "mustangostang",
-        "email" : "vlad.andersen@gmail.com",
+        "email" : "vlad.andersen@gmail.com"
     }],
     "license": "MIT License",
     "require": {
