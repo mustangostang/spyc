@@ -1,0 +1,23 @@
+{
+    "name": "lespoilus/spyc",
+    "description": "A simple YAML loader/dumper class for PHP",
+    "type": "library",
+    "keywords": [
+        "spyc",
+        "yaml",
+        "yml",
+        "zf2"
+    ],
+    "homepage": "https://github.com/lespoius/spyc/",
+    "authors" : [{
+        "name": "mustangostang",
+        "email" : "vlad.andersen@gmail.com"
+    }],
+    "license": "MIT License",
+    "require": {
+        "php": ">=5.3.1"
+    },
+    "autoload": {
+        "files": [ "spyc.php" ]
+    }
+}
