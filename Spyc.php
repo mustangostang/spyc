@@ -408,11 +408,17 @@ class Spyc {
     }
 
     $this->path = array();
+    $this->documents = array();
     $this->result = array();
 
     $cnt = count($Source);
     for ($i = 0; $i < $cnt; $i++) {
       $line = $Source[$i];
+      if($line == '---') {
+        $this->documents[] = $this->result;
+        $this->result = array();
+		continue;
+      }
       
       $this->indent = strlen($line) - strlen(ltrim($line));
       $tempPath = $this->getParentPathByIndent($this->indent);
@@ -458,7 +464,8 @@ class Spyc {
       $this->delayedPath = array();
 
     }
-    return $this->result;
+    $this->documents[] = $this->result;
+    return $this->documents;
   }
 
   private function loadFromSource ($input) {
