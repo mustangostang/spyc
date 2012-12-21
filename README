@@ -15,7 +15,7 @@ copyright: "(c) 2005-2006 Chris Wanstrath, 2006-2011 Vlad Andersen"
 tested on: [php 5.2.x]
 
 installation: >
-  Copy spyc.php to a directory you can
+  Copy Spyc.php to a directory you can
   access with your YAML-ready PHP script.
 
   That's it!
@@ -69,7 +69,7 @@ meat and a few potatoes:
       $yaml will become an array of all the data in wicked.yaml
     code: |
 
-      include('spyc.php');
+      include('Spyc.php');
 
       $yaml = Spyc::YAMLLoad('wicked.yaml');
 
@@ -79,7 +79,7 @@ meat and a few potatoes:
         array('A YAML','document in a','string')
     code: |
 
-      include('spyc.php');
+      include('Spyc.php');
 
       $yaml  = '- A YAML\n- document in a\n- string.';
       $array = Spyc::YAMLLoad($yaml);
@@ -90,7 +90,7 @@ meat and a few potatoes:
       $array.
     code: |
 
-      include('spyc.php');
+      include('Spyc.php');
 
       $array['name']  = 'chris';
       $array['sport'] = 'curbing';
