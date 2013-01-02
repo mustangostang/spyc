@@ -7,7 +7,7 @@
 # license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
 #
 
-include('../spyc.php');
+include('../Spyc.php');
 
 $array = Spyc::YAMLLoad('../spyc.yaml');
 
