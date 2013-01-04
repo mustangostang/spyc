@@ -9,7 +9,7 @@
 # learn some basic YAML.
 #
 
-include('../spyc.php');
+include('../Spyc.php');
 
 $array[] = 'Sequence item';
 $array['The Key'] = 'Mapped value';
