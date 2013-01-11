@@ -1,6 +1,5 @@
 <?php
 
-require_once 'PHPUnit/Framework.php';
 require_once ("../spyc.php");
 
 class ParseTest extends PHPUnit_Framework_TestCase {
@@ -67,7 +66,7 @@ class ParseTest extends PHPUnit_Framework_TestCase {
     public function testMappingsFloat() {
       $this->assertSame (5.34, $this->yaml['Float']);
     }
-    
+
     public function testMappingsNegative() {
       $this->assertSame (-90, $this->yaml['Negative']);
     }
@@ -317,6 +316,12 @@ dog', $this->yaml['many_lines']);
       $Failing = Spyc::YAMLLoad('failing1.yaml');
       $this->assertSame (array ('MyObject' => array ('Prop1' => array ('key1:val1'))),
           $Failing);
+    }
+
+    public function testQuotesWithComments() {
+      $Expected = 'bar';
+      $Actual = spyc_load_file ('comments.yaml');
+      $this->assertEquals ($Expected, $Actual['foo']);
     }
 
 }
