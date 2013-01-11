@@ -336,4 +336,16 @@ dog', $this->yaml['many_lines']);
       $this->assertEquals ($Expected, $Actual['bar']);
     }
 
+    public function testKai() {
+      $Expected = array (array ('example' => 'value'));
+      $Actual = spyc_load_file ('indent_1.yaml');
+      $this->assertEquals ($Expected, $Actual['kai']);
+    }
+
+    public function testKaiList() {
+      $Expected = array ('-item', '-item', 'item');
+      $Actual = spyc_load_file ('indent_1.yaml');
+      $this->assertEquals ($Expected, $Actual['kai_list_of_items']);
+    }
+
 }
