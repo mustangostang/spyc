@@ -324,4 +324,16 @@ dog', $this->yaml['many_lines']);
       $this->assertEquals ($Expected, $Actual['foo']);
     }
 
+    public function testArrayWithComments() {
+      $Expected = array ('x', 'y', 'z');
+      $Actual = spyc_load_file ('comments.yaml');
+      $this->assertEquals ($Expected, $Actual['arr']);
+    }
+
+    public function testAfterArrayWithKittens() {
+      $Expected = 'kittens';
+      $Actual = spyc_load_file ('comments.yaml');
+      $this->assertEquals ($Expected, $Actual['bar']);
+    }
+
 }

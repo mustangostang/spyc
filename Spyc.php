@@ -433,17 +433,15 @@ class Spyc {
         $i--;
       }
 
-      while (++$i < $cnt && self::greedilyNeedNextLine($line)) {
-        $line = rtrim ($line, " \n\t\r") . ' ' . ltrim ($Source[$i], " \t");
-      }
-      $i--;
-
-
-
       // Strip out comments
       if (strpos ($line, '#')) {
           $line = preg_replace('/\s*#([^"\']+)$/','',$line);
       }
+
+      while (++$i < $cnt && self::greedilyNeedNextLine($line)) {
+        $line = rtrim ($line, " \n\t\r") . ' ' . ltrim ($Source[$i], " \t");
+      }
+      $i--;
 
       $lineArray = $this->_parseLine($line);
 
