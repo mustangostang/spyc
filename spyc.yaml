@@ -198,6 +198,9 @@ noindent_records:
 "a:2":
   - 2000
 
+array with commas:
+  ["0","1"]
+
 # [Endloop]
 endloop: |
   Does this line in the end indeed make Spyc go to an infinite loop?
