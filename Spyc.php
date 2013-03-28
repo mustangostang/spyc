@@ -1033,13 +1033,10 @@ class Spyc {
 // Enable use of Spyc from command line
 // The syntax is the following: php Spyc.php spyc.yaml
 
-define ('SPYC_FROM_COMMAND_LINE', false);
-
 do {
-  if (!SPYC_FROM_COMMAND_LINE) break;
+  if (PHP_SAPI != 'cli') break;
   if (empty ($_SERVER['argc']) || $_SERVER['argc'] < 2) break;
   if (empty ($_SERVER['PHP_SELF']) || $_SERVER['PHP_SELF'] != 'Spyc.php') break;
   $file = $argv[1];
-  printf ("Spyc loading file: %s\n", $file);
-  print_r (spyc_load_file ($file));
+  echo json_encode (spyc_load_file ($file));
 } while (0);
