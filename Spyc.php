@@ -382,6 +382,8 @@ class Spyc {
     } else {
       if ($this->setting_dump_force_quotes && is_string ($value) && $value !== self::REMPTY)
         $value = '"' . $value . '"';
+      if (is_numeric($value) && is_string($value))
+        $value = '"' . $value . '"';
     }
 
 
