@@ -10,6 +10,12 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $this->files_to_test = array ('../spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
     }
 
+    public function testShortSyntax() {
+      $dump = spyc_dump(array ('item1', 'item2', 'item3'));
+      $awaiting = "- item1\n- item2\n- item3\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
     public function testDump() {
       foreach ($this->files_to_test as $file) {
         $yaml = spyc_load(file_get_contents($file));
@@ -35,22 +41,22 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $awaiting = "---\n- item1\n- item2\n- item3\n";
       $this->assertEquals ($awaiting, $dump);
     }
-    
+
     public function testNull() {
         $dump = Spyc::YAMLDump(array('a' => 1, 'b' => null, 'c' => 3));
         $awaiting = "---\na: 1\nb: null\nc: 3\n";
         $this->assertEquals ($awaiting, $dump);
     }
-    
+
     public function testNext() {
         $array = array("aaa", "bbb", "ccc");
         #set arrays internal pointer to next element
         next($array);
-        $dump = Spyc::YAMLDump($array);        
+        $dump = Spyc::YAMLDump($array);
         $awaiting = "---\n- aaa\n- bbb\n- ccc\n";
-        $this->assertEquals ($awaiting, $dump);        
+        $this->assertEquals ($awaiting, $dump);
     }
-    
+
     public function testDumpingMixedArrays() {
         $array = array();
         $array[] = 'Sequence item';
@@ -64,14 +70,14 @@ class DumpTest extends PHPUnit_Framework_TestCase {
         $array['Old Dog'] = "And if you want\n to preserve line breaks, \ngo ahead!";
         $array['key:withcolon'] = "Should support this to";
 
-        $yaml = Spyc::YAMLDump($array,4,60);        
+        $yaml = Spyc::YAMLDump($array,4,60);
     }
-    
+
     public function testMixed() {
         $dump = Spyc::YAMLDump(array(0 => 1, 'b' => 2, 1 => 3));
         $awaiting = "---\n0: 1\nb: 2\n1: 3\n";
         $this->assertEquals ($awaiting, $dump);
-    }    
+    }
 
     public function testDumpNumerics() {
       $dump = Spyc::YAMLDump(array ('404', '405', '500'));
@@ -90,7 +96,7 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $awaiting = "---\nsome: '&foo'\n";
       $this->assertEquals ($awaiting, $dump);
     }
-    
+
     public function testDumpExclamations() {
       $dump = Spyc::YAMLDump(array ('some' => '!foo'));
       $awaiting = "---\nsome: '!foo'\n";

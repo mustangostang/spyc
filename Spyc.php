@@ -32,6 +32,17 @@ if (!function_exists('spyc_load_file')) {
   }
 }
 
+if (!function_exists('spyc_dump')) {
+  /**
+   * Dumps array to YAML.
+   * @param array $data Array.
+   * @return string
+   */
+  function spyc_dump ($data) {
+    return Spyc::YAMLDump($data, false, false, true);
+  }
+}
+
 /**
    * The Simple PHP YAML Class.
    *
@@ -183,10 +194,11 @@ class Spyc {
      * @param array $array PHP array
      * @param int $indent Pass in false to use the default, which is 2
      * @param int $wordwrap Pass in 0 for no wordwrap, false for default (40)
+     * @param int $no_opening_dashes Do not start YAML file with "---\n"
      */
-  public static function YAMLDump($array,$indent = false,$wordwrap = false) {
+  public static function YAMLDump($array, $indent = false, $wordwrap = false, $no_opening_dashes = false) {
     $spyc = new Spyc;
-    return $spyc->dump($array,$indent,$wordwrap);
+    return $spyc->dump($array, $indent, $wordwrap, $no_opening_dashes);
   }
 
 
@@ -210,7 +222,7 @@ class Spyc {
      * @param int $indent Pass in false to use the default, which is 2
      * @param int $wordwrap Pass in 0 for no wordwrap, false for default (40)
      */
-  public function dump($array,$indent = false,$wordwrap = false) {
+  public function dump($array,$indent = false,$wordwrap = false, $no_opening_dashes = false) {
     // Dumps to some very clean YAML.  We'll have to add some more features
     // and options soon.  And better support for folding.
 
@@ -228,7 +240,8 @@ class Spyc {
     }
 
     // New YAML document
-    $string = "---\n";
+    $string = "";
+    if (!$no_opening_dashes) $string = "---\n";
 
     // Start at the base of the array and move through it.
     if ($array) {
