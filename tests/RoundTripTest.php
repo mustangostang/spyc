@@ -42,6 +42,23 @@ class RoundTripTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals (array ('x' => array ("#color" => '#fff')), roundTrip (array ("#color" => '#fff')));
     }
 
+    public function testPreserveString() {
+      $result1 = roundTrip ('0');
+      $result2 = roundTrip ('true');
+      $this->assertTrue (is_string ($result1['x']));
+      $this->assertTrue (is_string ($result2['x']));
+    }
+
+    public function testPreserveBool() {
+      $result = roundTrip (true);
+      $this->assertTrue (is_bool ($result['x']));
+    }
+
+    public function testPreserveInteger() {
+      $result = roundTrip (0);
+      $this->assertTrue (is_int ($result['x']));
+    }
+
     public function testWordWrap() {
       $this->assertEquals (array ('x' => "aaaaaaaaaaaaaaaaaaaaaaaaaaaa  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"), roundTrip ("aaaaaaaaaaaaaaaaaaaaaaaaaaaa  bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"));
     }
