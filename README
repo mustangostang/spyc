@@ -44,9 +44,6 @@ about: >
   YAML makes a lot of sense.  It's easy to use, easy to learn, and cool.
   As the lucky stiff named why once said, "YAML is a beacon of light."
 
-  If you're new to YAML, may we suggest YAML In Five Minutes:
-    - http://yaml.kwiki.org/?YamlInFiveMinutes
-
   If you don't have five minutes, realize that this README is a completely
   valid YAML document.  Dig in, load this or any YAML file into an array
   with Spyc and see how easy it is to translate friendly text into usable
