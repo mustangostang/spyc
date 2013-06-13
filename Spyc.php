@@ -532,7 +532,7 @@ class Spyc {
      * @return mixed
      */
   private function _toType($value) {
-    if ($value === '') return null;
+    if ($value === '') return "";
     $first_character = $value[0];
     $last_character = substr($value, -1, 1);
 
@@ -638,6 +638,15 @@ class Spyc {
     $seqs = array();
     $maps = array();
     $saved_strings = array();
+    $saved_empties = array();
+
+    // Check for empty strings
+    $regex = '/("")|(\'\')/';
+    if (preg_match_all($regex,$inline,$strings)) {
+      $saved_empties = $strings[0];
+      $inline  = preg_replace($regex,'YAMLEmpty',$inline);
+    }
+    unset($regex);
 
     // Check for strings
     $regex = '/(?:(")|(?:\'))((?(1)[^"]+|[^\']+))(?(1)"|\')/';
@@ -646,6 +655,8 @@ class Spyc {
       $inline  = preg_replace($regex,'YAMLString',$inline);
     }
     unset($regex);
+
+    // echo $inline;
 
     $i = 0;
     do {
@@ -709,6 +720,17 @@ class Spyc {
       }
     }
 
+
+    // Re-add the empties
+    if (!empty($saved_empties)) {
+      foreach ($explode as $key => $value) {
+        while (strpos($value,'YAMLEmpty') !== false) {
+          $explode[$key] = preg_replace('/YAMLEmpty/', '', $value, 1);
+          $value = $explode[$key];
+        }
+      }
+    }
+
     $finished = true;
     foreach ($explode as $key => $value) {
       if (strpos($value,'YAMLSeq') !== false) {
@@ -720,6 +742,9 @@ class Spyc {
       if (strpos($value,'YAMLString') !== false) {
         $finished = false; break;
       }
+      if (strpos($value,'YAMLEmpty') !== false) {
+        $finished = false; break;
+      }
     }
     if ($finished) break;
 
@@ -727,6 +752,7 @@ class Spyc {
     if ($i > 10)
       break; // Prevent infinite loops.
     }
+
 
     return $explode;
   }

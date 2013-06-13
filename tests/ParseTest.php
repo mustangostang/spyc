@@ -352,4 +352,14 @@ dog', $this->yaml['many_lines']);
       $this->assertEquals ($Expected, $Actual['kai_list_of_items']);
     }
 
+    public function testDifferentQuoteTypes() {
+      $expected = array ('Something', "", "", "Something else");
+      $this->assertSame ($expected, $this->yaml['invoice']);
+    }
+
+    public function testDifferentQuoteTypes2() {
+      $expected = array ('Something', "Nothing", "Anything", "Thing");
+      $this->assertSame ($expected, $this->yaml['quotes']);
+    }
+
 }

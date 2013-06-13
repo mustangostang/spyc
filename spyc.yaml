@@ -7,7 +7,7 @@
 # license: [MIT License, http://www.opensource.org/licenses/mit-license.php]
 # copyright: (c) 2005-2006 Chris Wanstrath, 2006-2011 Vlad Andersen
 #
-# spyc.yml - A file containing the YAML that Spyc understands.
+# spyc.yaml - A file containing the YAML that Spyc understands.
 
 ---
 
@@ -200,6 +200,9 @@ noindent_records:
 
 array with commas:
   ["0","1"]
+
+invoice: ["Something", "", '', "Something else"]
+quotes: ['Something', "Nothing", 'Anything', "Thing"]
 
 # [Endloop]
 endloop: |
