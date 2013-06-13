@@ -325,6 +325,7 @@ class Spyc {
     }
 
     if ($value === array()) $value = '[ ]';
+    if ($value === "") $value = '""';
     if (in_array ($value, array ('true', 'TRUE', 'false', 'FALSE', 'y', 'Y', 'n', 'N', 'null', 'NULL'), true)) {
        $value = $this->_doLiteralBlock($value,$indent);
     }
