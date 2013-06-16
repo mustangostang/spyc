@@ -419,7 +419,7 @@ class Spyc {
   private function loadWithSource($Source) {
     if (empty ($Source)) return array();
     if ($this->setting_use_syck_is_possible && function_exists ('syck_load')) {
-      $array = syck_load (implode ('', $Source));
+      $array = syck_load (implode ("\n", $Source));
       return is_array($array) ? $array : array();
     }
 
@@ -477,7 +477,7 @@ class Spyc {
 
   private function loadFromSource ($input) {
     if (!empty($input) && strpos($input, "\n") === false && file_exists($input))
-    return file($input);
+      $input = file_get_contents($input);
 
     return $this->loadFromString($input);
   }
