@@ -441,7 +441,7 @@ class Spyc {
       if ($literalBlockStyle) {
         $line = rtrim ($line, $literalBlockStyle . " \n");
         $literalBlock = '';
-        $line .= $this->LiteralPlaceHolder;
+        $line .= ' '.$this->LiteralPlaceHolder;
         $literal_block_indent = strlen($Source[$i+1]) - strlen(ltrim($Source[$i+1]));
         while (++$i < $cnt && $this->literalBlockContinues($Source[$i], $this->indent)) {
           $literalBlock = $this->addLiteralLine($literalBlock, $Source[$i], $literalBlockStyle, $literal_block_indent);
@@ -991,7 +991,16 @@ class Spyc {
     return array($array);
   }
 
+  private function checkKeysInValue($value) {
+    if (strchr('[{"\'', $value[0]) === false) {
+      if (strchr($value, ': ') !== false) {
+          throw new Exception('Too many keys: '.$value);
+      }
+    }
+  }
+
   private function returnMappedValue ($line) {
+    $this->checkKeysInValue($line);
     $array = array();
     $key         = self::unquote (trim(substr($line,0,-1)));
     $array[$key] = '';
@@ -1013,7 +1022,7 @@ class Spyc {
   private function returnKeyValuePair ($line) {
     $array = array();
     $key = '';
-    if (strpos ($line, ':')) {
+    if (strpos ($line, ': ')) {
       // It's a key/value pair most likely
       // If the key is in double quotes pull it out
       if (($line[0] == '"' || $line[0] == "'") && preg_match('/^(["\'](.*)["\'](\s)*:)/',$line,$matches)) {
@@ -1021,10 +1030,10 @@ class Spyc {
         $key   = $matches[2];
       } else {
         // Do some guesswork as to the key and the value
-        $explode = explode(':',$line);
-        $key     = trim($explode[0]);
-        array_shift($explode);
-        $value   = trim(implode(':',$explode));
+        $explode = explode(': ', $line);
+        $key     = trim(array_shift($explode));
+        $value   = trim(implode(': ', $explode));
+        $this->checkKeysInValue($value);
       }
       // Set the type of the value.  Int, string, etc
       $value = $this->_toType($value);
