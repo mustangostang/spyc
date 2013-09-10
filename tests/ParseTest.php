@@ -310,6 +310,10 @@ dog', $this->yaml['many_lines']);
         $this->assertSame (array (3000), $this->yaml['a:3']);
     }
 
+    public function testComplicatedKeyWithColon() {
+        $this->assertSame(array("'a: b:'' test'" => 1), Spyc::YAMLLoad('"\'a: b:\'\' test\'": 1'));
+    }
+
     public function testTooManyKeysException() {
         $this->assertSame(array('x: y:' => 'z:'), Spyc::YAMLLoad('"x: y:": "z:"'));
         $this->setExpectedException('Exception');

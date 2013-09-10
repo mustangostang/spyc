@@ -404,27 +404,6 @@ class Spyc {
     return $value;
   }
 
-  /**
-     * Returns the number of mapping keys found in a given string.
-     * @access private
-     * @return integer
-     * @param $line The string of text to examine
-     */
-  private function mapKeyCount($line) {
-    $count = $depth = 0;
-    $quote = false;
-    foreach (str_split($line) as $c) {
-      ($c == '"' || $c == "'") && $quote = !$quote;
-      (!$quote && ($c == '[' || $c == '{')) && $depth++;
-      (!$quote && ($c == ']' || $c == '}')) && $depth--;
-      if ($quote || $depth > 0) { continue; }
-      $c == ' ' && $last == ':' && $count++;
-      $last = $c;
-    }
-    $last == ':' && $count++;
-    return $count;
-  }
-
 // LOADING FUNCTIONS
 
   private function __load($input) {
@@ -529,9 +508,6 @@ class Spyc {
       $this->addGroup($line, $group);
       $line = $this->stripGroup ($line, $group);
     }
-
-    if ($this->mapKeyCount($line) > 1)
-      throw new Exception('Too many keys: '.$line);
 
     if ($this->startsMappedSequence($line))
       return $this->returnMappedSequence($line);
@@ -1016,6 +992,11 @@ class Spyc {
   }
 
   private function returnMappedValue ($line) {
+    if (strchr('[{"\'', $line[0]) === false) {
+      if (strchr($line, ': ') !== false) {
+          throw new Exception('Too many keys: '.$line);
+      }
+    }
     $array = array();
     $key         = self::unquote (trim(substr($line,0,-1)));
     $array[$key] = '';
