@@ -199,6 +199,9 @@ noindent_records:
   - 2000
 a:3: [3000]
 
+complex_unquoted_key:
+  a:b:''test': value
+
 array with commas:
   ["0","1"]
 
