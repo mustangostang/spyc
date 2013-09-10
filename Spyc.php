@@ -404,6 +404,27 @@ class Spyc {
     return $value;
   }
 
+  /**
+     * Returns the number of mapping keys found in a given string.
+     * @access private
+     * @return integer
+     * @param $line The string of text to examine
+     */
+  private function mapKeyCount($line) {
+    $count = $depth = 0;
+    $quote = false;
+    foreach (str_split($line) as $c) {
+      ($c == '"' || $c == "'") && $quote = !$quote;
+      (!$quote && ($c == '[' || $c == '{')) && $depth++;
+      (!$quote && ($c == ']' || $c == '}')) && $depth--;
+      if ($quote || $depth > 0) { continue; }
+      $c == ' ' && $last == ':' && $count++;
+      $last = $c;
+    }
+    $last == ':' && $count++;
+    return $count;
+  }
+
 // LOADING FUNCTIONS
 
   private function __load($input) {
@@ -441,7 +462,7 @@ class Spyc {
       if ($literalBlockStyle) {
         $line = rtrim ($line, $literalBlockStyle . " \n");
         $literalBlock = '';
-        $line .= $this->LiteralPlaceHolder;
+        $line .= ' '.$this->LiteralPlaceHolder;
         $literal_block_indent = strlen($Source[$i+1]) - strlen(ltrim($Source[$i+1]));
         while (++$i < $cnt && $this->literalBlockContinues($Source[$i], $this->indent)) {
           $literalBlock = $this->addLiteralLine($literalBlock, $Source[$i], $literalBlockStyle, $literal_block_indent);
@@ -508,6 +529,9 @@ class Spyc {
       $this->addGroup($line, $group);
       $line = $this->stripGroup ($line, $group);
     }
+
+    if ($this->mapKeyCount($line) > 1)
+      throw new Exception('Too many keys: '.$line);
 
     if ($this->startsMappedSequence($line))
       return $this->returnMappedSequence($line);
@@ -1013,7 +1037,7 @@ class Spyc {
   private function returnKeyValuePair ($line) {
     $array = array();
     $key = '';
-    if (strpos ($line, ':')) {
+    if (strpos ($line, ': ')) {
       // It's a key/value pair most likely
       // If the key is in double quotes pull it out
       if (($line[0] == '"' || $line[0] == "'") && preg_match('/^(["\'](.*)["\'](\s)*:)/',$line,$matches)) {
@@ -1021,10 +1045,9 @@ class Spyc {
         $key   = $matches[2];
       } else {
         // Do some guesswork as to the key and the value
-        $explode = explode(':',$line);
-        $key     = trim($explode[0]);
-        array_shift($explode);
-        $value   = trim(implode(':',$explode));
+        $explode = explode(': ', $line);
+        $key     = trim(array_shift($explode));
+        $value   = trim(implode(': ', $explode));
       }
       // Set the type of the value.  Int, string, etc
       $value = $this->_toType($value);

@@ -306,6 +306,16 @@ dog', $this->yaml['many_lines']);
       $this->assertSame (array (2000), $this->yaml['a:2']);
     }
 
+    public function testUnquotedColonsInKeys() {
+        $this->assertSame (array (3000), $this->yaml['a:3']);
+    }
+
+    public function testTooManyKeysException() {
+        $this->assertSame(array('x: y:' => 'z:'), Spyc::YAMLLoad('"x: y:": "z:"'));
+        $this->setExpectedException('Exception');
+        Spyc::YAMLLoad('x: y: z:');
+    }
+
     public function testSpecialCharacters() {
       $this->assertSame ('[{]]{{]]', $this->yaml['special_characters']);
     }
