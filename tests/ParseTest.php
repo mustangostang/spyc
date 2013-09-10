@@ -314,9 +314,14 @@ dog', $this->yaml['many_lines']);
         $this->assertSame(array("a:b:''test'" => 'value'), $this->yaml['complex_unquoted_key']);
     }
 
-    public function testTooManyKeysException() {
+    public function testKeysInMappedValueException() {
         $this->setExpectedException('Exception');
         Spyc::YAMLLoad('x: y: z:');
+    }
+
+    public function testKeysInValueException() {
+        $this->setExpectedException('Exception');
+        Spyc::YAMLLoad('x: y: z');
     }
 
     public function testSpecialCharacters() {

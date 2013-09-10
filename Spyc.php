@@ -991,12 +991,16 @@ class Spyc {
     return array($array);
   }
 
-  private function returnMappedValue ($line) {
-    if (strchr('[{"\'', $line[0]) === false) {
-      if (strchr($line, ': ') !== false) {
-          throw new Exception('Too many keys: '.$line);
+  private function checkKeysInValue($value) {
+    if (strchr('[{"\'', $value[0]) === false) {
+      if (strchr($value, ': ') !== false) {
+          throw new Exception('Too many keys: '.$value);
       }
     }
+  }
+
+  private function returnMappedValue ($line) {
+    $this->checkKeysInValue($line);
     $array = array();
     $key         = self::unquote (trim(substr($line,0,-1)));
     $array[$key] = '';
@@ -1029,6 +1033,7 @@ class Spyc {
         $explode = explode(': ', $line);
         $key     = trim(array_shift($explode));
         $value   = trim(implode(': ', $explode));
+        $this->checkKeysInValue($value);
       }
       // Set the type of the value.  Int, string, etc
       $value = $this->_toType($value);
