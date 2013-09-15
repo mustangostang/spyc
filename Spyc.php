@@ -545,13 +545,13 @@ class Spyc {
       $is_quoted = true;
     } while (0);
 
-    if ($is_quoted)
+    if ($is_quoted) {
+      $value = str_replace('\n', "\n", $value);
       return strtr(substr ($value, 1, -1), array ('\\"' => '"', '\'\'' => '\'', '\\\'' => '\''));
+    }
 
     if (strpos($value, ' #') !== false && !$is_quoted)
       $value = preg_replace('/\s+#(.+)$/','',$value);
-
-    if (!$is_quoted) $value = str_replace('\n', "\n", $value);
 
     if ($first_character == '[' && $last_character == ']') {
       // Take out strings sequences and mappings

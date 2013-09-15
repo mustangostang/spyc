@@ -76,9 +76,12 @@ class ParseTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testNewline() {
-      $this->assertSame ("\n", $this->yaml['NewLine']);
+      $this->assertSame ('\n', $this->yaml['NewLine']);
     }
 
+    public function testQuotedNewline() {
+      $this->assertSame ("\n", $this->yaml['QuotedNewLine']);
+    }
 
     public function testSeq0() {
       $this->assertEquals ("PHP Class", $this->yaml[0]);
@@ -189,6 +192,10 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testShortSequence() {
       $this->assertEquals (array( 0 => "a", 1 => array (0 => 1, 1 => 2), 2 => "b"), $this->yaml[16]);
+    }
+
+    public function testQuotedNewlines() {
+      $this->assertEquals ("First line\nSecond line\nThird line", $this->yaml[17]);
     }
 
     public function testHash_1() {
