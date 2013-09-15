@@ -326,14 +326,14 @@ class Spyc {
 
     if ($value === array()) $value = '[ ]';
     if ($value === "") $value = '""';
-    if (in_array ($value, array ('true', 'TRUE', 'false', 'FALSE', 'y', 'Y', 'n', 'N', 'null', 'NULL'), true)) {
-       $value = $this->_doLiteralBlock($value,$indent);
+    if (self::isTranslationWord($value)) {
+      $value = $this->_doLiteralBlock($value, $indent);
     }
     if (trim ($value) != $value)
        $value = $this->_doLiteralBlock($value,$indent);
 
     if (is_bool($value)) {
-       $value = ($value) ? "true" : "false";
+       $value = $value ? "true" : "false";
     }
 
     if ($value === null) $value = 'null';
@@ -402,6 +402,60 @@ class Spyc {
 
 
     return $value;
+  }
+
+  private function isTrueWord($value) {
+    $words = self::getTranslations(array('true', 'on', 'yes', 'y'));
+    return in_array($value, $words, true);
+  }
+
+  private function isFalseWord($value) {
+    $words = self::getTranslations(array('false', 'off', 'no', 'n'));
+    return in_array($value, $words, true);
+  }
+
+  private function isNullWord($value) {
+    $words = self::getTranslations(array('null', '~'));
+    return in_array($value, $words, true);
+  }
+
+  private function isTranslationWord($value) {
+    return (
+      self::isTrueWord($value)  ||
+      self::isFalseWord($value) ||
+      self::isNullWord($value)
+    );
+  }
+
+  /**
+     * Coerce a string into a native type
+     * Reference: http://yaml.org/type/bool.html
+     * TODO: Use only words from the YAML spec.
+     * @access private
+     * @param $value The value to coerce
+     */
+  private function coerceValue(&$value) {
+    if (self::isTrueWord($value)) {
+      $value = true;
+    } else if (self::isFalseWord($value)) {
+      $value = false;
+    } else if (self::isNullWord($value)) {
+      $value = null;
+    }
+  }
+
+  /**
+     * Given a set of words, perform the appropriate translations on them to
+     * match the YAML 1.1 specification for type coercing.
+     * @param $words The words to translate
+     * @access private
+     */
+  private static function getTranslations(array $words) {
+    $result = array();
+    foreach ($words as $i) {
+      $result = array_merge($result, array(ucfirst($i), strtoupper($i), strtolower($i)));
+    }
+    return $result;
   }
 
 // LOADING FUNCTIONS
@@ -605,15 +659,7 @@ class Spyc {
       return $value;
     }
 
-    if (in_array($value,
-                 array('true', 'on', '+', 'yes', 'y', 'True', 'TRUE', 'On', 'ON', 'YES', 'Yes', 'Y'))) {
-      return true;
-    }
-
-    if (in_array(strtolower($value),
-                 array('false', 'off', '-', 'no', 'n'))) {
-      return false;
-    }
+    $this->coerceValue($value);
 
     if (is_numeric($value)) {
       if ($value === '0') return 0;
@@ -952,8 +998,8 @@ class Spyc {
 
 
   private function isArrayElement ($line) {
-    if (!$line) return false;
-    if ($line[0] != '-') return false;
+    if (!$line || !is_scalar($line)) return false;
+    if (substr($line, 0, 2) != '- ') return false;
     if (strlen ($line) > 3)
       if (substr($line,0,3) == '---') return false;
 
@@ -980,7 +1026,7 @@ class Spyc {
   }
 
   private function startsMappedSequence ($line) {
-    return ($line[0] == '-' && substr ($line, -1, 1) == ':');
+    return (substr($line, 0, 2) == '- ' && substr ($line, -1, 1) == ':');
   }
 
   private function returnMappedSequence ($line) {
@@ -1052,6 +1098,9 @@ class Spyc {
      $array = array();
      $value   = trim(substr($line,1));
      $value   = $this->_toType($value);
+     if ($this->isArrayElement($value)) {
+       $value = $this->returnArrayElement($value);
+     }
      $array[] = $value;
      return $array;
   }

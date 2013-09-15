@@ -358,14 +358,15 @@ dog', $this->yaml['many_lines']);
       $this->assertEquals ($Expected, $Actual['bar']);
     }
 
+    // Plain characters http://www.yaml.org/spec/1.2/spec.html#id2789510
     public function testKai() {
-      $Expected = array (array ('example' => 'value'));
+      $Expected = array('-example' => 'value');
       $Actual = spyc_load_file ('indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['kai']);
     }
 
     public function testKaiList() {
-      $Expected = array ('-item', '-item', 'item');
+      $Expected = array ('-item', '-item', '-item');
       $Actual = spyc_load_file ('indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['kai_list_of_items']);
     }
@@ -380,4 +381,9 @@ dog', $this->yaml['many_lines']);
       $this->assertSame ($expected, $this->yaml['quotes']);
     }
 
+    // Separation spaces http://www.yaml.org/spec/1.2/spec.html#id2778394
+    public function testMultipleArrays() {
+      $expected = array(array(array('x')));
+      $this->assertSame($expected, Spyc::YAMLLoad("- - - x"));
+    }
 }
