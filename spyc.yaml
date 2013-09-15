@@ -26,6 +26,7 @@ Float: 5.34
 Negative: -90
 SmallFloat: 0.7
 NewLine: \n
+QuotedNewLine: "\n"
 
 # A sequence
 - PHP Class
@@ -115,6 +116,9 @@ all languages:
 
 # Added in .2.4: bug [ 1418193 ] Quote Values in Nested Arrays
 - [a, ['1', "2"], b]
+
+# Add in .5.2: Quoted new line values.
+- "First line\nSecond line\nThird line"
 
 # Added in .2.4: malformed YAML
 all
