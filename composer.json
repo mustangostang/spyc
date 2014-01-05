@@ -12,7 +12,7 @@
         "name": "mustangostang",
         "email": "vlad.andersen@gmail.com"
     }],
-    "license": "MIT License",
+    "license": "MIT",
     "require": {
         "php": ">=5.3.1"
     },
