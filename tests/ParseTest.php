@@ -44,7 +44,8 @@ class ParseTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testMappingsHex() {
-      $this->assertSame ('0xf3', $this->yaml['Hex']);
+      $this->assertSame (243, $this->yaml['Hex']);
+      $this->assertSame ('f0xf3', $this->yaml['BadHex']);
     }
 
     public function testMappingsBooleanTrue() {
