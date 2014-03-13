@@ -659,6 +659,11 @@ class Spyc {
       return $value;
     }
 
+    if (is_numeric($value) && preg_match('/^0[xX][0-9a-fA-F]+$/', $value)) {
+      // Hexadecimal value.
+      return hexdec($value);
+    }
+
     $this->coerceValue($value);
 
     if (is_numeric($value)) {
