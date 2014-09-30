@@ -13,7 +13,7 @@ Using Spyc is trivial:
 
 ```
 <?php
-require_once "spyc.php";
+require_once "Spyc.php";
 $Data = Spyc::YAMLLoad('spyc.yaml');
 ```
 
@@ -21,7 +21,7 @@ or (if you prefer functional syntax)
 
 ```
 <?php
-require_once "spyc.php";
+require_once "Spyc.php";
 $Data = spyc_load_file('spyc.yaml');
 ```
 
