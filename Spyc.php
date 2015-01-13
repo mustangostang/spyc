@@ -43,6 +43,8 @@ if (!function_exists('spyc_dump')) {
   }
 }
 
+if (!class_exists('Spyc')) {
+
 /**
    * The Simple PHP YAML Class.
    *
@@ -1133,6 +1135,7 @@ class Spyc {
     $line = trim(str_replace($group, '', $line));
     return $line;
   }
+}
 }
 
 // Enable use of Spyc from command line
