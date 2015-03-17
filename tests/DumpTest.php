@@ -133,4 +133,16 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals ($awaiting, $dump);
     }
 
+    public function testParagraph() {
+      $dump = Spyc::YAMLDump(array ('key' => "|\n  value"));
+      $awaiting = "---\nkey: |\n  value\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testParagraphBig() {
+      $dump = Spyc::YAMLDump(array ('key' => "|-\n  value_first\n\n  value"));
+      $awaiting = "---\nkey: |-\n  value_first\n\n  value\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
 }
