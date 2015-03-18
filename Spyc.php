@@ -371,15 +371,14 @@ class Spyc {
     }
     $exploded = explode("\n",$value);
     $newValue = '|';
-    if (isset($exploded[0]) && ($exploded[0] == "|" || $exploded[0] == "|-")) {
+    if (isset($exploded[0]) && ($exploded[0] == "|" || $exploded[0] == "|-" || $exploded[0] == ">")) {
         $newValue = $exploded[0];
         unset($exploded[0]);
-    } else {
-        $indent  += $this->_dumpIndent;
     }
+    $indent += $this->_dumpIndent;
     $spaces   = str_repeat(' ',$indent);
     foreach ($exploded as $line) {
-      $newValue .= "\n" . $spaces . ($line);
+      $newValue .= "\n" . $spaces . (trim($line));
     }
     return $newValue;
   }
