@@ -139,9 +139,33 @@ class DumpTest extends PHPUnit_Framework_TestCase {
       $this->assertEquals ($awaiting, $dump);
     }
 
-    public function testParagraphBig() {
-      $dump = Spyc::YAMLDump(array ('key' => "|-\n  value_first\n\n  value"));
-      $awaiting = "---\nkey: |-\n  value_first\n\n  value\n";
+    public function testParagraphTwo() {
+      $dump = Spyc::YAMLDump(array ('key' => 'Congrats, pimpt bedrijventerreinen pimpt bedrijventerreinen pimpt bedrijventerreinen!'));
+      $awaiting = "---\nkey: >\n  Congrats, pimpt bedrijventerreinen pimpt\n  bedrijventerreinen pimpt\n  bedrijventerreinen!\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testString() {
+      $dump = Spyc::YAMLDump(array ('key' => array('key_one' => 'Congrats, pimpt bedrijventerreinen!')));
+      $awaiting = "---\nkey:\n  key_one: Congrats, pimpt bedrijventerreinen!\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testStringLong() {
+      $dump = Spyc::YAMLDump(array ('key' => array('key_one' => 'Congrats, pimpt bedrijventerreinen pimpt bedrijventerreinen pimpt bedrijventerreinen!')));
+      $awaiting = "---\nkey:\n  key_one: >\n    Congrats, pimpt bedrijventerreinen pimpt\n    bedrijventerreinen pimpt\n    bedrijventerreinen!\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testStringDoubleQuote() {
+      $dump = Spyc::YAMLDump(array ('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation"'))));
+      $awaiting = "---\nkey:\n  key_one:\n    key_two: |\n      \"Système d'e-réservation\"\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testStringStartingWithSpace() {
+      $dump = Spyc::YAMLDump(array ('key' => array('key_one' => "    Congrats, pimpt bedrijventerreinen \n    pimpt bedrijventerreinen pimpt bedrijventerreinen!")));
+      $awaiting = "---\nkey:\n  key_one: |\n    Congrats, pimpt bedrijventerreinen\n    pimpt bedrijventerreinen pimpt bedrijventerreinen!\n";
       $this->assertEquals ($awaiting, $dump);
     }
 
