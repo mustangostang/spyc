@@ -159,13 +159,37 @@ class DumpTest extends PHPUnit_Framework_TestCase {
 
     public function testStringDoubleQuote() {
       $dump = Spyc::YAMLDump(array ('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation"'))));
-      $awaiting = "---\nkey:\n  key_one:\n    key_two: |\n      \"Système d'e-réservation\"\n";
+      $awaiting = "---\nkey:\n  key_one:\n    key_two: |\n      Système d'e-réservation\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testLongStringDoubleQuote() {
+      $dump = Spyc::YAMLDump(array ('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation bedrijventerreinen pimpt" bedrijventerreinen!'))));
+      $awaiting = "---\nkey:\n  key_one:\n    key_two: |\n      \"Système d'e-réservation bedrijventerreinen pimpt\" bedrijventerreinen!\n";
       $this->assertEquals ($awaiting, $dump);
     }
 
     public function testStringStartingWithSpace() {
       $dump = Spyc::YAMLDump(array ('key' => array('key_one' => "    Congrats, pimpt bedrijventerreinen \n    pimpt bedrijventerreinen pimpt bedrijventerreinen!")));
       $awaiting = "---\nkey:\n  key_one: |\n    Congrats, pimpt bedrijventerreinen\n    pimpt bedrijventerreinen pimpt bedrijventerreinen!\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testPerCentOne() {
+      $dump = Spyc::YAMLDump(array ('key' => "%name%, pimpts bedrijventerreinen!"));
+      $awaiting = "---\nkey: '%name%, pimpts bedrijventerreinen!'\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testPerCentAndSimpleQuote() {
+      $dump = Spyc::YAMLDump(array ('key' => "%name%, pimpt's bedrijventerreinen!"));
+      $awaiting = "---\nkey: \"%name%, pimpt's bedrijventerreinen!\"\n";
+      $this->assertEquals ($awaiting, $dump);
+    }
+
+    public function testPerCentAndDoubleQuote() {
+      $dump = Spyc::YAMLDump(array ('key' => '%name%, pimpt\'s "bed"rijventerreinen!'));
+      $awaiting = "---\nkey: |\n  %name%, pimpt's \"bed\"rijventerreinen!\n";
       $this->assertEquals ($awaiting, $dump);
     }
 
