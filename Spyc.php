@@ -315,7 +315,7 @@ class Spyc {
   private function _dumpNode($key, $value, $indent, $previous_key = -1, $first_key = 0, $source_array = null) {
     // do some folding here, for blocks
     if (is_string ($value) && ((strpos($value,"\n") !== false || strpos($value,": ") !== false || strpos($value,"- ") !== false ||
-      strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false || strpos ($value, '  ') !== false ||
+      strpos($value,"*") !== false || strpos($value,"#") !== false || strpos($value,"<") !== false || strpos($value,">") !== false || strpos ($value, '%') !== false || strpos ($value, '  ') !== false ||
       strpos($value,"[") !== false || strpos($value,"]") !== false || strpos($value,"{") !== false || strpos($value,"}") !== false) || strpos($value,"&") !== false || strpos($value, "'") !== false || strpos($value, "!") === 0 ||
       substr ($value, -1, 1) == ':')
     ) {
@@ -371,9 +371,17 @@ class Spyc {
     }
     $exploded = explode("\n",$value);
     $newValue = '|';
-    $indent  += $this->_dumpIndent;
+    if (isset($exploded[0]) && ($exploded[0] == "|" || $exploded[0] == "|-" || $exploded[0] == ">")) {
+        $newValue = $exploded[0];
+        unset($exploded[0]);
+    }
+    $indent += $this->_dumpIndent;
     $spaces   = str_repeat(' ',$indent);
     foreach ($exploded as $line) {
+      $line = trim($line);
+      if (strpos($line, '"') === 0 && strrpos($line, '"') == (strlen($line)-1) || strpos($line, "'") === 0 && strrpos($line, "'") == (strlen($line)-1)) {
+        $line = substr($line, 1, -1);
+      }
       $newValue .= "\n" . $spaces . ($line);
     }
     return $newValue;
