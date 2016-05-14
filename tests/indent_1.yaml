@@ -63,3 +63,8 @@ kai_list_of_items:
   - -item
   - '-item'
   -item
+
+&foo bar:
+  1: "abc"
+
+zzz: *foo
