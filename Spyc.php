@@ -267,6 +267,7 @@ class Spyc {
      * @param $indent The indent of the current node
      */
   private function _yamlize($key,$value,$indent, $previous_key = -1, $first_key = 0, $source_array = null) {
+    if(is_object($value)) $value = (array)$value;
     if (is_array($value)) {
       if (empty ($value))
         return $this->_dumpNode($key, array(), $indent, $previous_key, $first_key, $source_array);
