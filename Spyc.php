@@ -193,10 +193,10 @@ class Spyc {
      *
      * @access public
      * @return string
-     * @param array $array PHP array
+     * @param array|\stdClass $array PHP array
      * @param int $indent Pass in false to use the default, which is 2
      * @param int $wordwrap Pass in 0 for no wordwrap, false for default (40)
-     * @param int $no_opening_dashes Do not start YAML file with "---\n"
+     * @param bool $no_opening_dashes Do not start YAML file with "---\n"
      */
   public static function YAMLDump($array, $indent = false, $wordwrap = false, $no_opening_dashes = false) {
     $spyc = new Spyc;
