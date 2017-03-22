@@ -17,7 +17,7 @@
         "php": ">=5.3.1"
     },
     "autoload": {
-        "classmap": [ "src/Spyc.php" ],
+        "psr-4": { "": "src" },
         "files": [ "Spyc.php" ]
     },
     "require-dev": {
