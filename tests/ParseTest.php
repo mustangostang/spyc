@@ -108,11 +108,6 @@ class ParseTest extends TestCase {
       $this->assertSame("\n", $this->yaml['QuotedNewLine']);
     }
 
-    public function testSeq0() 
-    {
-      $this->assertEquals("PHP Class", $this->yaml[0]);
-    }
-
     public function testSeq1() 
     {
       $this->assertEquals("Basic YAML Loader", $this->yaml[1]);
