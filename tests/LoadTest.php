@@ -1,7 +1,13 @@
 <?php
+namespace Spyc\Tests;
 
-class LoadTest extends PHPUnit_Framework_TestCase {
-    public function testQuotes() {
+use Spyc\Spyc;
+use PHPUnit\Framework\TestCase;
+
+class LoadTest extends TestCase 
+{
+    public function testQuotes() 
+    {
         $test_values = array(
             "adjacent '''' \"\"\"\" quotes.",
             "adjacent '''' quotes.",

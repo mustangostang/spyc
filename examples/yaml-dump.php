@@ -9,7 +9,9 @@
 # learn some basic YAML.
 #
 
-include('../Spyc.php');
+require 'vendor/autoload.php';
+
+use Spyc\Spyc;
 
 $array[] = 'Sequence item';
 $array['The Key'] = 'Mapped value';

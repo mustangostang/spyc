@@ -8,23 +8,37 @@
         "yml"
     ],
     "homepage": "https://github.com/mustangostang/spyc/",
-    "authors" : [{
+    "authors" : [
+        {
         "name": "mustangostang",
         "email": "vlad.andersen@gmail.com"
+        },
+        {
+        "name": "Lawrence Stubbs",
+        "email": "lstubbs@techno.express"
     }],
     "license": "MIT",
     "require": {
-        "php": ">=5.3.1"
+        "php": "^7.0"
     },
     "autoload": {
-        "files": [ "Spyc.php" ]
+        "files": [ 
+            "yaml/functions.php" 
+        ],
+        "psr-4": {
+            "Spyc\\": "yaml/"
+        }
     },
     "require-dev": {
-        "phpunit/phpunit": "4.3.*@dev"
+        "phpunit/phpunit": ">5.7.0"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.5.x-dev"
+    "autoload-dev": {
+        "psr-4": {
+            "Spyc\\Tests\\": "tests/"
         }
-    }
+    },
+    "scripts": {
+        "test": "phpunit --bootstrap vendor/autoload.php tests"
+    },
+    "minimum-stability": "stable"
 }
