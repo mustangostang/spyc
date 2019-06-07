@@ -15,9 +15,9 @@ class LoadTest extends TestCase
         );
         foreach($test_values as $value) {
             $yaml = array($value);
-            $dump = Spyc::YAMLDump ($yaml);
-            $yaml_loaded = Spyc::YAMLLoad ($dump);
-            $this->assertEquals ($yaml, $yaml_loaded);
+            $dump = Spyc::YAMLDump($yaml);
+            $spyc_loaded = Spyc::YAMLLoad($dump);
+            $this->assertEquals($yaml, $spyc_loaded);
         }
     }
 }

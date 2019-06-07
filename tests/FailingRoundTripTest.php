@@ -4,9 +4,9 @@ namespace Spyc\Tests;
 use Spyc\Spyc;
 use PHPUnit\Framework\TestCase;
 
-function roundTrip($a) { return Spyc::YAMLLoad(Spyc::YAMLDump(array('x' => $a))); }
+function xroundTrip($a) { return Spyc::YAMLLoad(Spyc::YAMLDump(array('x' => $a))); }
 
-class RoundTripTest extends TestCase 
+class FailingRoundTripTest extends TestCase 
 {
     protected function setUp(): void
     {
@@ -14,6 +14,6 @@ class RoundTripTest extends TestCase
 
     public function testNewLines() 
     {
-      $this->assertEquals (array ('x' => "\n"), roundTrip ("\n"));
+      $this->assertEquals(array('x' => "\n"), xroundTrip("\n"));
     }   
 }

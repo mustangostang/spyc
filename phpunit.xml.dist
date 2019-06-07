@@ -10,8 +10,8 @@
          stopOnFailure="false">
 
     <testsuites>
-        <testsuite name="all">
-            <directory suffix="Test.php">Yaml tests/</directory>
+        <testsuite name="Spyc Test Suite">
+            <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>
         

@@ -11,23 +11,23 @@ class DumpTest extends TestCase
 
     public function setUp(): void 
     {
-      $this->files_to_test = array (__DIR__.'spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
+      $this->files_to_test = array('spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
     }
 
     public function testShortSyntax() 
     {
-      $dump = yaml_dump(array ('item1', 'item2', 'item3'));
+      $dump = spyc_dump(array('item1', 'item2', 'item3'));
       $awaiting = "- item1\n- item2\n- item3\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDump() 
     {
-      foreach ($this->files_to_test as $file) {
-        $yaml = yaml_load(file_get_contents($file));
-        $dump = Spyc::YAMLDump ($yaml);
-        $yaml_after_dump = Spyc::YAMLLoad ($dump);
-        $this->assertEquals ($yaml, $yaml_after_dump);
+      foreach($this->files_to_test as $file) {
+        $yaml = spyc_load(file_get_contents($file));
+        $dump = Spyc::YAMLDump($yaml);
+        $spyc_after_dump = Spyc::YAMLLoad($dump);
+        $this->assertEquals($yaml, $spyc_after_dump);
       }
     }
 
@@ -35,26 +35,26 @@ class DumpTest extends TestCase
     {
       $Spyc = new Spyc();
       $Spyc->setting_dump_force_quotes = true;
-      foreach ($this->files_to_test as $file) {
+      foreach($this->files_to_test as $file) {
         $yaml = $Spyc->load(file_get_contents($file));
-        $dump = $Spyc->dump ($yaml);
-        $yaml_after_dump = Spyc::YAMLLoad ($dump);
-        $this->assertEquals ($yaml, $yaml_after_dump);
+        $dump = $Spyc->dump($yaml);
+        $spyc_after_dump = Spyc::YAMLLoad($dump);
+        $this->assertEquals($yaml, $spyc_after_dump);
       }
     }
 
     public function testDumpArrays() 
     {
-      $dump = Spyc::YAMLDump(array ('item1', 'item2', 'item3'));
+      $dump = Spyc::YAMLDump(array('item1', 'item2', 'item3'));
       $awaiting = "---\n- item1\n- item2\n- item3\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testNull() 
     {
         $dump = Spyc::YAMLDump(array('a' => 1, 'b' => null, 'c' => 3));
         $awaiting = "---\na: 1\nb: null\nc: 3\n";
-        $this->assertEquals ($awaiting, $dump);
+        $this->assertEquals($awaiting, $dump);
     }
 
     public function testNext() 
@@ -64,7 +64,7 @@ class DumpTest extends TestCase
         next($array);
         $dump = Spyc::YAMLDump($array);
         $awaiting = "---\n- aaa\n- bbb\n- ccc\n";
-        $this->assertEquals ($awaiting, $dump);
+        $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpingMixedArrays() 
@@ -88,139 +88,139 @@ class DumpTest extends TestCase
     {
         $dump = Spyc::YAMLDump(array(0 => 1, 'b' => 2, 1 => 3));
         $awaiting = "---\n0: 1\nb: 2\n1: 3\n";
-        $this->assertEquals ($awaiting, $dump);
+        $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpNumerics() 
     {
-      $dump = Spyc::YAMLDump(array ('404', '405', '500'));
+      $dump = Spyc::YAMLDump(array('404', '405', '500'));
       $awaiting = "---\n- \"404\"\n- \"405\"\n- \"500\"\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpAsterisks() 
     {
-      $dump = Spyc::YAMLDump(array ('*'));
+      $dump = Spyc::YAMLDump(array('*'));
       $awaiting = "---\n- '*'\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpAmpersands() 
     {
-      $dump = Spyc::YAMLDump(array ('some' => '&foo'));
+      $dump = Spyc::YAMLDump(array('some' => '&foo'));
       $awaiting = "---\nsome: '&foo'\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpExclamations() 
     {
-      $dump = Spyc::YAMLDump(array ('some' => '!foo'));
+      $dump = Spyc::YAMLDump(array('some' => '!foo'));
       $awaiting = "---\nsome: '!foo'\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpExclamations2() 
     {
-      $dump = Spyc::YAMLDump(array ('some' => 'foo!'));
+      $dump = Spyc::YAMLDump(array('some' => 'foo!'));
       $awaiting = "---\nsome: foo!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpApostrophes() 
     {
-      $dump = Spyc::YAMLDump(array ('some' => "'Biz' pimpt bedrijventerreinen"));
+      $dump = Spyc::YAMLDump(array('some' => "'Biz' pimpt bedrijventerreinen"));
       $awaiting = "---\nsome: \"'Biz' pimpt bedrijventerreinen\"\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testDumpNumericHashes() 
     {
-      $dump = Spyc::YAMLDump(array ("titel"=> array("0" => "", 1 => "Dr.", 5 => "Prof.", 6 => "Prof. Dr.")));
+      $dump = Spyc::YAMLDump(array("titel"=> array("0" => "", 1 => "Dr.", 5 => "Prof.", 6 => "Prof. Dr.")));
       $awaiting = "---\ntitel:\n  0: \"\"\n  1: Dr.\n  5: Prof.\n  6: Prof. Dr.\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testEmpty() 
     {
       $dump = Spyc::YAMLDump(array("foo" => array()));
       $awaiting = "---\nfoo: [ ]\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testHashesInKeys() 
     {
-      $dump = Spyc::YAMLDump(array ('#color' => '#ffffff'));
+      $dump = Spyc::YAMLDump(array('#color' => '#ffffff'));
       $awaiting = "---\n\"#color\": '#ffffff'\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testParagraph() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => "|\n  value"));
+      $dump = Spyc::YAMLDump(array('key' => "|\n  value"));
       $awaiting = "---\nkey: |\n  value\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testParagraphTwo() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => 'Congrats, pimpt bedrijventerreinen pimpt bedrijventerreinen pimpt bedrijventerreinen!'));
+      $dump = Spyc::YAMLDump(array('key' => 'Congrats, pimpt bedrijventerreinen pimpt bedrijventerreinen pimpt bedrijventerreinen!'));
       $awaiting = "---\nkey: >\n  Congrats, pimpt bedrijventerreinen pimpt\n  bedrijventerreinen pimpt\n  bedrijventerreinen!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testString() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => array('key_one' => 'Congrats, pimpt bedrijventerreinen!')));
+      $dump = Spyc::YAMLDump(array('key' => array('key_one' => 'Congrats, pimpt bedrijventerreinen!')));
       $awaiting = "---\nkey:\n  key_one: Congrats, pimpt bedrijventerreinen!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testStringLong() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => array('key_one' => 'Congrats, pimpt bedrijventerreinen pimpt bedrijventerreinen pimpt bedrijventerreinen!')));
+      $dump = Spyc::YAMLDump(array('key' => array('key_one' => 'Congrats, pimpt bedrijventerreinen pimpt bedrijventerreinen pimpt bedrijventerreinen!')));
       $awaiting = "---\nkey:\n  key_one: >\n    Congrats, pimpt bedrijventerreinen pimpt\n    bedrijventerreinen pimpt\n    bedrijventerreinen!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testStringDoubleQuote() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation"'))));
+      $dump = Spyc::YAMLDump(array('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation"'))));
       $awaiting = "---\nkey:\n  key_one:\n    key_two: |\n      Système d'e-réservation\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testLongStringDoubleQuote() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation bedrijventerreinen pimpt" bedrijventerreinen!'))));
+      $dump = Spyc::YAMLDump(array('key' => array('key_one' =>  array('key_two' => '"Système d\'e-réservation bedrijventerreinen pimpt" bedrijventerreinen!'))));
       $awaiting = "---\nkey:\n  key_one:\n    key_two: |\n      \"Système d'e-réservation bedrijventerreinen pimpt\" bedrijventerreinen!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testStringStartingWithSpace() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => array('key_one' => "    Congrats, pimpt bedrijventerreinen \n    pimpt bedrijventerreinen pimpt bedrijventerreinen!")));
+      $dump = Spyc::YAMLDump(array('key' => array('key_one' => "    Congrats, pimpt bedrijventerreinen \n    pimpt bedrijventerreinen pimpt bedrijventerreinen!")));
       $awaiting = "---\nkey:\n  key_one: |\n    Congrats, pimpt bedrijventerreinen\n    pimpt bedrijventerreinen pimpt bedrijventerreinen!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testPerCentOne() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => "%name%, pimpts bedrijventerreinen!"));
+      $dump = Spyc::YAMLDump(array('key' => "%name%, pimpts bedrijventerreinen!"));
       $awaiting = "---\nkey: '%name%, pimpts bedrijventerreinen!'\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testPerCentAndSimpleQuote() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => "%name%, pimpt's bedrijventerreinen!"));
+      $dump = Spyc::YAMLDump(array('key' => "%name%, pimpt's bedrijventerreinen!"));
       $awaiting = "---\nkey: \"%name%, pimpt's bedrijventerreinen!\"\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 
     public function testPerCentAndDoubleQuote() 
     {
-      $dump = Spyc::YAMLDump(array ('key' => '%name%, pimpt\'s "bed"rijventerreinen!'));
+      $dump = Spyc::YAMLDump(array('key' => '%name%, pimpt\'s "bed"rijventerreinen!'));
       $awaiting = "---\nkey: |\n  %name%, pimpt's \"bed\"rijventerreinen!\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->assertEquals($awaiting, $dump);
     }
 }
