@@ -21,28 +21,6 @@ class DumpTest extends TestCase
       $this->assertEquals($awaiting, $dump);
     }
 
-    public function testDump() 
-    {
-      foreach($this->files_to_test as $file) {
-        $yaml = spyc_load(file_get_contents($file));
-        $dump = Spyc::YAMLDump($yaml);
-        $spyc_after_dump = Spyc::YAMLLoad($dump);
-        $this->assertEquals($yaml, $spyc_after_dump);
-      }
-    }
-
-    public function testDumpWithQuotes() 
-    {
-      $Spyc = new Spyc();
-      $Spyc->setting_dump_force_quotes = true;
-      foreach($this->files_to_test as $file) {
-        $yaml = $Spyc->load(file_get_contents($file));
-        $dump = $Spyc->dump($yaml);
-        $spyc_after_dump = Spyc::YAMLLoad($dump);
-        $this->assertEquals($yaml, $spyc_after_dump);
-      }
-    }
-
     public function testDumpArrays() 
     {
       $dump = Spyc::YAMLDump(array('item1', 'item2', 'item3'));

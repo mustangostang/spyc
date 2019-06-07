@@ -325,7 +325,7 @@ class Spyc
       // It's a sequence
       $string = $spaces.'- '.$value."\n";
     } else {
-      // if($first_key===0)  throw new Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
+      // if($first_key===0)  throw new \Exception('Keys are all screwy.  The first one was zero, now it\'s "'. $key .'"');
       // It's mapped
       if(strpos($key, ":") !== false || strpos($key, "#") !== false) { $key = '"' . $key . '"'; }
       $string = rtrim($spaces.$key.': '.$value)."\n";
@@ -1057,7 +1057,7 @@ class Spyc
   {
     if(strchr('[{"\'', $value[0]) === false) {
       if(strchr($value, ': ') !== false) {
-          throw new Exception('Too many keys: '.$value);
+          throw new \Exception('Too many keys: '.$value);
       }
     }
   }
