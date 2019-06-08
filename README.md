@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/techno-express/spyc.svg?branch=master)](https://travis-ci.org/techno-express/spyc)
+
 **Spyc** is a YAML loader/dumper written in pure PHP. Given a YAML document, Spyc will return an array that
 you can use however you see fit. Given an array, Spyc will return a string which contains a YAML document 
 built from your data.
@@ -7,13 +9,18 @@ for log files, config files, custom protocols, the works. For more information, 
 
 Spyc supports YAML 1.0 specification.
 
+## Installation
+
+    composer require mustangostang/spyc
+
 ## Using Spyc
 
 Using Spyc is trivial:
 
 ```php
 <?php
-require_once "spyc.php";
+require 'vendor/autoload.php';
+
 $Data = Spyc::YAMLLoad('spyc.yaml');
 ```
 
@@ -21,7 +28,8 @@ or (if you prefer functional syntax)
 
 ```php
 <?php
-require_once "spyc.php";
+require 'vendor/autoload.php';
+
 $Data = spyc_load_file('spyc.yaml');
 ```
 
