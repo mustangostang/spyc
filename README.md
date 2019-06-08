@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf23167ee99d4fe8a56f5886226de70d)](https://app.codacy.com/app/techno-express/spyc?utm_source=github.com&utm_medium=referral&utm_content=techno-express/spyc&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/techno-express/spyc.svg?branch=master)](https://travis-ci.org/techno-express/spyc)
 
 **Spyc** is a YAML loader/dumper written in pure PHP. Given a YAML document, Spyc will return an array that
