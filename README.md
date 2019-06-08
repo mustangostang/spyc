@@ -1,5 +1,5 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf23167ee99d4fe8a56f5886226de70d)](https://app.codacy.com/app/techno-express/spyc?utm_source=github.com&utm_medium=referral&utm_content=techno-express/spyc&utm_campaign=Badge_Grade_Dashboard)
-[![Build Status](https://travis-ci.org/techno-express/spyc.svg?branch=master)](https://travis-ci.org/techno-express/spyc)
+[![Build Status](https://travis-ci.org/techno-express/spyc.svg?branch=master)](https://travis-ci.org/techno-express/spyc)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cf23167ee99d4fe8a56f5886226de70d)](https://app.codacy.com/app/techno-express/spyc?utm_source=github.com&utm_medium=referral&utm_content=techno-express/spyc&utm_campaign=Badge_Grade_Dashboard)
+[![codecov](https://codecov.io/gh/techno-express/spyc/branch/master/graph/badge.svg)](https://codecov.io/gh/techno-express/spyc)[![Maintainability](https://api.codeclimate.com/v1/badges/414f3b593f321f4f255f/maintainability)](https://codeclimate.com/github/techno-express/spyc/maintainability)
 
 **Spyc** is a YAML loader/dumper written in pure PHP. Given a YAML document, Spyc will return an array that
 you can use however you see fit. Given an array, Spyc will return a string which contains a YAML document 
