@@ -396,4 +396,18 @@ dog', $this->yaml['many_lines']);
       $expected = array(array(array('x')));
       $this->assertSame($expected, Spyc::YAMLLoad("- - - x"));
     }
+
+    public function testElementWithEmptyHash()
+    {
+        $element = "hash: {}\narray: []";
+        $yaml = Spyc::YAMLLoadString($element);
+        $this->assertEquals($yaml['hash'], []);
+        $this->assertEquals($yaml['array'], []);
+
+        $yaml = Spyc::YAMLLoadString($element, [
+            'setting_empty_hash_as_object' => true
+        ]);
+        $this->assertInstanceOf(stdClass::class, $yaml['hash']);
+        $this->assertEquals($yaml['array'], []);
+    }
 }
