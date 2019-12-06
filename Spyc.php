@@ -951,9 +951,10 @@ class Spyc {
   }
 
   private static function startsLiteralBlock ($line) {
-    $lastChar = substr (trim($line), -1);
-    if ($lastChar != '>' && $lastChar != '|') return false;
-    if ($lastChar == '|') return $lastChar;
+    $matches = array();
+    if (!preg_match('`(>|\|)[\d+-]?$`', $line, $matches))
+        return false;
+    $lastChar = $matches[1];
     // HTML tags should not be counted as literal blocks.
     if (preg_match ('#<.*?>$#', $line)) return false;
     return $lastChar;
