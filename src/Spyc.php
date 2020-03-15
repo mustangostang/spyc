@@ -2,6 +2,8 @@
 
 namespace Mustangostang;
 
+use stdClass;
+
 /**
    * The Simple PHP YAML Class.
    *
@@ -1039,7 +1041,7 @@ class Spyc {
   private function checkKeysInValue($value) {
     if (strchr('[{"\'', $value[0]) === false) {
       if (strchr($value, ': ') !== false) {
-          throw new Exception('Too many keys: '.$value);
+          throw new SpycException('Too many keys: '.$value);
       }
     }
   }

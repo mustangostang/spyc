@@ -1,11 +1,13 @@
 <?php
 
-class ParseTest extends PHPUnit_Framework_TestCase {
+use Mustangostang\Spyc;
+
+class ParseTest extends \PHPUnit\Framework\TestCase {
 
     protected $yaml;
 
     protected function setUp() {
-      $this->yaml = spyc_load_file(__DIR__.'/../spyc.yaml');
+      $this->yaml = Spyc::YAMLLoad(__DIR__ . '/files/spyc.yaml');
     }
 
     public function testMergeHashKeys() {
@@ -13,19 +15,19 @@ class ParseTest extends PHPUnit_Framework_TestCase {
         array ('step' => array('instrument' => 'Lasik 2000', 'pulseEnergy' => 5.4, 'pulseDuration' => 12, 'repetition' => 1000, 'spotSize' => '1mm')),
         array ('step' => array('instrument' => 'Lasik 2000', 'pulseEnergy' => 5.4, 'pulseDuration' => 12, 'repetition' => 1000, 'spotSize' => '2mm')),
       );
-      $Actual = spyc_load_file (__DIR__.'/indent_1.yaml');
+      $Actual = Spyc::YAMLLoad(__DIR__ . '/files/indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['steps']);
     }
 
     public function testDeathMasks() {
       $Expected = array ('sad' => 2, 'magnificent' => 4);
-      $Actual = spyc_load_file (__DIR__.'/indent_1.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['death masks are']);
     }
 
     public function testDevDb() {
       $Expected = array ('adapter' => 'mysql', 'host' => 'localhost', 'database' => 'rails_dev');
-      $Actual = spyc_load_file (__DIR__.'/indent_1.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['development']);
     }
 
@@ -324,13 +326,17 @@ dog', $this->yaml['many_lines']);
         $this->assertSame(array("a:b:''test'" => 'value'), $this->yaml['complex_unquoted_key']);
     }
 
+    /**
+     * @expectedException \Mustangostang\SpycException
+     */
     public function testKeysInMappedValueException() {
-        $this->setExpectedException('Exception');
         Spyc::YAMLLoad('x: y: z:');
     }
 
+    /**
+     * @expectedException \Mustangostang\SpycException
+     */
     public function testKeysInValueException() {
-        $this->setExpectedException('Exception');
         Spyc::YAMLLoad('x: y: z');
     }
 
@@ -339,45 +345,45 @@ dog', $this->yaml['many_lines']);
     }
 
     public function testAngleQuotes() {
-      $Quotes = Spyc::YAMLLoad(__DIR__.'/quotes.yaml');
+      $Quotes = Spyc::YAMLLoad(__DIR__ . '/files/quotes.yaml');
       $this->assertEquals (array ('html_tags' => array ('<br>', '<p>'), 'html_content' => array ('<p>hello world</p>', 'hello<br>world'), 'text_content' => array ('hello world')),
           $Quotes);
     }
 
     public function testFailingColons() {
-      $Failing = Spyc::YAMLLoad(__DIR__.'/failing1.yaml');
+      $Failing = Spyc::YAMLLoad(__DIR__ . '/files/failing1.yaml');
       $this->assertSame (array ('MyObject' => array ('Prop1' => array ('key1:val1'))),
           $Failing);
     }
 
     public function testQuotesWithComments() {
       $Expected = 'bar';
-      $Actual = spyc_load_file (__DIR__.'/comments.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/comments.yaml');
       $this->assertEquals ($Expected, $Actual['foo']);
     }
 
     public function testArrayWithComments() {
       $Expected = array ('x', 'y', 'z');
-      $Actual = spyc_load_file (__DIR__.'/comments.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/comments.yaml');
       $this->assertEquals ($Expected, $Actual['arr']);
     }
 
     public function testAfterArrayWithKittens() {
       $Expected = 'kittens';
-      $Actual = spyc_load_file (__DIR__.'/comments.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/comments.yaml');
       $this->assertEquals ($Expected, $Actual['bar']);
     }
 
     // Plain characters http://www.yaml.org/spec/1.2/spec.html#id2789510
     public function testKai() {
       $Expected = array('-example' => 'value');
-      $Actual = spyc_load_file (__DIR__.'/indent_1.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['kai']);
     }
 
     public function testKaiList() {
       $Expected = array ('-item', '-item', '-item');
-      $Actual = spyc_load_file (__DIR__.'/indent_1.yaml');
+      $Actual = Spyc::YAMLLoad (__DIR__ . '/files/indent_1.yaml');
       $this->assertEquals ($Expected, $Actual['kai_list_of_items']);
     }
 
