@@ -1,6 +1,8 @@
 <?php
 
-class LoadTest extends PHPUnit_Framework_TestCase {
+use Mustangostang\Spyc;
+
+class LoadTest extends \PHPUnit\Framework\TestCase {
     public function testQuotes() {
         $test_values = array(
             "adjacent '''' \"\"\"\" quotes.",

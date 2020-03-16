@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+
+<?php
+$autoload = realpath(__DIR__."/../vendor/autoload.php");
+if (!file_exists($autoload)) {
+    $autoload = realpath(__DIR__."/../../../autoload.php");
+    if (!file_exists($autoload)) {
+        throw new \Exception('Autoload not found. Did you run `composer dump-autoload`?');
+    }
+}
+require_once($autoload);
+
+if (empty ($_SERVER['argc']) || $_SERVER['argc'] < 2) exit(1);
+$file = $argv[1];
+echo json_encode (Mustangostang\Spyc::YAMLLoad($file));

@@ -9,7 +9,7 @@
 # learn some basic YAML.
 #
 
-include('../Spyc.php');
+require("../vendor/autoload.php");
 
 $array[] = 'Sequence item';
 $array['The Key'] = 'Mapped value';
@@ -22,4 +22,6 @@ $array['The trick?'] = 'The trick is that we overrode the default indent, 2, to 
 $array['Old Dog'] = "And if you want\n to preserve line breaks, \ngo ahead!";
 $array['key:withcolon'] = "Should support this to";
 
-$yaml = Spyc::YAMLDump($array,4,60);
+$yaml = \Mustangostang\Spyc::YAMLDump($array,4,60);
+
+echo $yaml;

@@ -1,22 +1,23 @@
 <?php
 
-class DumpTest extends PHPUnit_Framework_TestCase {
+use Mustangostang\Spyc;
+
+class DumpTest extends \PHPUnit\Framework\TestCase {
 
     private $files_to_test = array();
 
     public function setUp() {
-      $this->files_to_test = array (__DIR__.'/../spyc.yaml', 'failing1.yaml', 'indent_1.yaml', 'quotes.yaml');
-    }
-
-    public function testShortSyntax() {
-      $dump = spyc_dump(array ('item1', 'item2', 'item3'));
-      $awaiting = "- item1\n- item2\n- item3\n";
-      $this->assertEquals ($awaiting, $dump);
+      $this->files_to_test = [
+          __DIR__ . '/files/spyc.yaml',
+          __DIR__ . '/files/failing1.yaml',
+          __DIR__ . '/files/indent_1.yaml',
+          __DIR__ . '/files/quotes.yaml'
+      ];
     }
 
     public function testDump() {
       foreach ($this->files_to_test as $file) {
-        $yaml = spyc_load(file_get_contents($file));
+        $yaml = Spyc::YAMLLoad(file_get_contents($file));
         $dump = Spyc::YAMLDump ($yaml);
         $yaml_after_dump = Spyc::YAMLLoad ($dump);
         $this->assertEquals ($yaml, $yaml_after_dump);

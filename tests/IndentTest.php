@@ -1,11 +1,13 @@
 <?php
 
-class IndentTest extends PHPUnit_Framework_TestCase {
+use Mustangostang\Spyc;
+
+class IndentTest extends \PHPUnit\Framework\TestCase {
 
     protected $Y;
 
     protected function setUp() {
-        $this->Y = Spyc::YAMLLoad(__DIR__."/indent_1.yaml");
+        $this->Y = Spyc::YAMLLoad(__DIR__ . "/files/indent_1.yaml");
     }
 
     public function testIndent_1() {
